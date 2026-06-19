@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Synora';
+const description =
+  'Ecossistema inteligente para governança, interoperabilidade, conhecimento e operações digitais especializadas.';
+
+const infrastructure = [
+  {
+    name: 'Synora Core',
+    desc: 'Núcleo central responsável por conhecimento, identidade, workflows, agentes e orquestração.',
+    meta: 'Conhecimento • Identidade • Orquestração',
+    action: 'Acessar Core'
+  },
+  {
+    name: 'Guardian AI',
+    desc: 'Camada de governança, validação, auditoria e certificação de eventos críticos.',
+    meta: 'Governança • Auditoria • Confiança'
+  },
+  {
+    name: 'Synora Internacional',
+    desc: 'Capacidade estratégica que adapta soluções para operar de forma nativa em países, idiomas, moedas e contextos regulatórios.',
+    meta: 'Governança global • Operação local • Expansão sustentável'
+  }
+];
+
+const solutions = [
+  {
+    name: 'Synora Mediadora',
+    desc: 'Plataforma inteligente para mediação e reorganização financeira.',
+    meta: 'Mediação • Reorganização • Operação assistida'
+  },
+  {
+    name: 'Synora Tourism',
+    desc: 'Inteligência operacional, financeira e de relacionamento para turismo e hospitalidade.',
+    meta: 'Turismo • Hospitalidade • Relacionamento'
+  },
+  {
+    name: 'Synora Audio',
+    desc: 'Infraestrutura para criação, proteção, distribuição e monetização de ativos digitais.',
+    meta: 'Criação • Proteção • Monetização'
+  },
+  {
+    name: 'Synora Finance',
+    desc: 'Infraestrutura financeira inteligente para gestão, organização e automação de processos financeiros.',
+    meta: 'Gestão • Organização • Automação financeira'
+  }
+];
+---
+
+<BaseLayout title={title} description={description} path="/">
+  <nav class="nav" aria-label="Navegação principal">
+    <div class="nav-inner shell">
+      <a class="brand" href="/">
+        <img src="/brand/synora-mark.clean.png" alt="Synora" />
+        <span>Synora</span>
+      </a>
+      <div class="nav-links" aria-label="Seções">
+        <a href="/">Home</a>
+        <a href="#infraestrutura">Infraestrutura</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </div>
+      <a class="button" href="/core/">Core</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow">● Ecossistema Synora</p>
+        <h1>Infraestrutura inteligente para ecossistemas digitais em evolução.</h1>
+        <p class="lead">
+          Uma fundação comum para construir, operar e evoluir soluções digitais com governança, interoperabilidade,
+          conhecimento e inteligência operacional compartilhadas.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#infraestrutura">Explorar arquitetura</a>
+          <a class="button" href="/core/">Acessar Core</a>
+        </div>
+      </div>
+      <div class="hero-system" aria-label="Camadas do ecossistema Synora">
+        <div class="system-orbit" aria-hidden="true"><span>Core</span></div>
+        <div class="system-grid">
+          <div class="pill">Governança</div>
+          <div class="pill">Interoperabilidade</div>
+          <div class="pill">Conhecimento</div>
+          <div class="pill">Operação</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="infraestrutura" class="section shell">
+      <div class="section-head">
+        <p class="section-kicker">Infraestrutura do Ecossistema</p>
+        <h2>Capacidades estruturais que sustentam todas as soluções.</h2>
+        <p class="section-copy">
+          As capacidades estruturais da Synora estabelecem padrões compartilhados de governança, conhecimento,
+          interoperabilidade e operação para todo o ecossistema.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        {infrastructure.map((item) => (
+          <article class="card">
+            <div class="card-top">
+              <h3>{item.name}</h3>
+              <span class="tag">infra</span>
+            </div>
+            <p>{item.desc}</p>
+            <div class="meta">{item.meta}</div>
+            {item.action && (
+              <div class="card-actions">
+                <a class="button primary" href="/core/">{item.action}</a>
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="solucoes" class="section shell">
+      <div class="section-head">
+        <p class="section-kicker">Soluções Especializadas</p>
+        <h2>Verticais que geram valor direto para mercados específicos.</h2>
+        <p class="section-copy">
+          As soluções especializadas aplicam os mesmos princípios, capacidades e padrões operacionais em diferentes
+          contextos de mercado.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        {solutions.map((item) => (
+          <article class="card">
+            <div class="card-top">
+              <h3>{item.name}</h3>
+              <span class="tag">solução</span>
+            </div>
+            <p>{item.desc}</p>
+            <div class="meta">{item.meta}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="sobre" class="section shell">
+      <div class="split">
+        <div class="section-head">
+          <p class="section-kicker">Princípio Estratégico</p>
+          <h2>Fiboops foi a origem. Synora é a evolução.</h2>
+        </div>
+        <div class="panel">
+          <p>
+            A evolução é estrutural. A Synora transforma o aprendizado acumulado pela Fiboops em uma arquitetura
+            capaz de sustentar múltiplas soluções sob princípios compartilhados de governança, interoperabilidade,
+            conhecimento e inteligência operacional.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="section shell">
+      <div class="panel contact-panel">
+        <div>
+          <p class="section-kicker">Contato</p>
+          <h2>Vamos mapear a próxima operação.</h2>
+          <p class="section-copy">
+            Uma conversa para compreender contexto, desafios e possibilidades de evolução dentro do ecossistema
+            Synora.
+          </p>
+        </div>
+        <div class="contact-action">
+          <a class="button primary" href="mailto:hello@synora.app.br">Iniciar conversa</a>
+          <span class="contact-email">hello@synora.app.br</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <span>© Synora Ecosystem. All rights reserved.</span>
+    <span>AI • Finance • Infrastructure • Middleware • Audio</span>
+  </footer>
+</BaseLayout>

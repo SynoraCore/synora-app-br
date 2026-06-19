@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = 'Synora Core';
+const description =
+  'Memoria viva do ecossistema Synora: conhecimento, arquitetura, governanca e evolucao institucional.';
+
+const statusCards = [
+  ['Memoria', 'Ativa', 'Decisoes, documentos e contexto preservados'],
+  ['Criterio', 'Em estruturacao', 'Politicas e evidencias para decisao sensivel'],
+  ['Operacao', 'Continua', 'Agentes, fluxos e proximos marcos em ordem'],
+  ['Verticais', 'Conectadas', 'Mediadora, Tourism, Audio e Finance sobre a mesma base']
+];
+
+const coreAreas = [
+  {
+    name: 'Conhecimento',
+    desc: 'Biblioteca institucional com documentos fundacionais, principios, decisoes e materiais de referencia para orientar a evolucao da Synora.',
+    meta: 'Memoria • Documentos • Fundacao'
+  },
+  {
+    name: 'Governanca',
+    desc: 'Camada de confianca para registrar politicas, contratos, evidencias e criterios de validacao antes de decisoes sensiveis.',
+    meta: 'Politicas • Auditoria • Confianca'
+  },
+  {
+    name: 'Arquitetura',
+    desc: 'Organizacao dos modelos operacionais, agentes, workflows e relacoes entre Core, Guardian e verticais especializadas.',
+    meta: 'Workflows • Agentes • Orquestracao'
+  },
+  {
+    name: 'Evolucao',
+    desc: 'Registro dos marcos, aprendizados, proximas etapas e amadurecimento institucional do ecossistema Synora.',
+    meta: 'Roadmap • Marcos • Aprendizado'
+  }
+];
+
+const corePillars = [
+  ['Biblioteca', 'Documentos fundacionais, relatorios e registros de decisao.'],
+  ['Guardian Center', 'Politicas, contratos, evidencias e validacoes criticas.'],
+  ['Matilha', 'GuGo, Skipper, Piola, Wolf e Guardian em papeis claros.'],
+  ['Roadmap', 'Marcos, proximas entregas e aprendizados do ecossistema.']
+];
+
+const operatingTrail = [
+  ['Entrada', 'Documentos, conversas e decisoes entram no Core como memoria organizada.'],
+  ['Criterio', 'Guardian e governanca definem o que precisa de validacao, registro ou revisao.'],
+  ['Organizacao', 'Arquitetura, agentes e workflows transformam informacao dispersa em sistema.'],
+  ['Uso', 'Verticais acessam conhecimento comum para operar com coerencia e velocidade.']
+];
+---
+
+<BaseLayout title={title} description={description} path="/core/">
+  <nav class="nav" aria-label="Navegação principal">
+    <div class="nav-inner shell">
+      <a class="brand" href="/">
+        <img src="/brand/synora-mark.clean.png" alt="Synora" />
+        <span>Synora</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#infraestrutura">Infraestrutura</a>
+        <a href="/#solucoes">Solucoes</a>
+        <a href="/#sobre">Sobre</a>
+        <a href="/#contato">Contato</a>
+      </div>
+      <a class="button is-active" href="/core/">Core</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="visao" class="hero shell core-hero core-editorial-hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Area restrita</p>
+        <h1>O centro de conhecimento e governanca da Synora.</h1>
+        <p class="lead">
+          O Core organiza memoria, criterios, arquitetura e evolucao institucional para que cada vertical avance com
+          coerencia, confianca e continuidade.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#areas">Ver estrutura</a>
+          <a class="button" href="/">Voltar para Home</a>
+        </div>
+      </div>
+
+      <div class="core-command-panel core-command-panel-rich" aria-label="Painel institucional do Synora Core">
+        <div class="command-panel-head">
+          <span>Synora Core</span>
+          <strong>Memoria viva</strong>
+          <small>Conhecimento, governanca, arquitetura e evolucao em uma camada central.</small>
+        </div>
+        <div class="command-layers">
+          <div><span>01</span><strong>Conhecimento</strong><small>Base institucional</small></div>
+          <div><span>02</span><strong>Governanca</strong><small>Criterios e confianca</small></div>
+          <div><span>03</span><strong>Arquitetura</strong><small>Agentes e workflows</small></div>
+          <div><span>04</span><strong>Evolucao</strong><small>Marcos e aprendizado</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="status" class="section shell core-section-tight">
+      <div class="core-topbar" aria-label="Sintese do estado do Core">
+        {statusCards.map(([label, value, detail]) => (
+          <article class="card status-card">
+            <p class="tag">{label}</p>
+            <strong>{value}</strong>
+            <span>{detail}</span>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section shell core-section-tight">
+      <div class="core-principle-band">
+        <p class="section-kicker">Principio operacional</p>
+        <h2>As verticais geram valor. O Guardian preserva confianca. O Core preserva conhecimento.</h2>
+        <p>
+          A Synora conecta essas camadas em um ecossistema inteligente, auditavel e evolutivo. O Core e o lugar onde a
+          memoria institucional ganha forma, criterio e continuidade.
+        </p>
+      </div>
+    </section>
+
+    <section class="section shell core-section-tight">
+      <div class="core-structure-panel">
+        <div class="section-head">
+          <p class="section-kicker">Centro de comando</p>
+          <h2>Organizacao executiva para o que a Synora aprende, decide e reaproveita.</h2>
+          <p class="section-copy">
+            O Core recebe informacao, preserva contexto, estabelece criterio e devolve estrutura para as verticais
+            operarem com menos atrito.
+          </p>
+        </div>
+        <div class="core-pillar-list">
+          {corePillars.map(([name, desc]) => (
+            <article>
+              <strong>{name}</strong>
+              <p>{desc}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="areas" class="section shell core-section-tight">
+      <div class="section-head">
+        <p class="section-kicker">Estrutura do Core</p>
+        <h2>Quatro areas para manter o ecossistema legivel.</h2>
+        <p class="section-copy">
+          Cada area guarda um tipo de responsabilidade: preservar conhecimento, validar criterio, organizar arquitetura
+          e registrar evolucao.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        {coreAreas.map((area) => (
+          <article class="card quiet-card core-area-card">
+            <div class="card-top">
+              <h3>{area.name}</h3>
+              <span class="tag">core</span>
+            </div>
+            <p>{area.desc}</p>
+            <div class="meta">{area.meta}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="principio" class="section shell">
+      <div class="split core-trail-layout">
+        <div class="section-head">
+          <p class="section-kicker">Como opera</p>
+          <h2>Uma trilha simples para transformar informacao em criterio.</h2>
+          <p class="section-copy">
+            A organizacao do Core permite que cada avanço da Synora deixe rastro claro: origem, criterio e uso.
+          </p>
+        </div>
+        <div class="panel core-trail">
+          {operatingTrail.map(([label, text], index) => (
+            <div class="trail-item">
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <strong>{label}</strong>
+                <p>{text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <span>Synora Core</span>
+    <span>Knowledge • Trust • Evolution</span>
+  </footer>
+</BaseLayout>

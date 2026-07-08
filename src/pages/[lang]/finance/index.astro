@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SimplePageMain from '../../../components/SimplePageMain.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SiteNav from '../../../components/SiteNav.astro';
+import { CONTENT, LOCALES, isLocale, getAlternates } from '../../../i18n';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { lang: locale } }));
+}
+
+const localeParam = Astro.params.lang;
+if (!isLocale(localeParam)) {
+  throw new Error(`Invalid locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+const content = CONTENT[locale];
+const page = content.pages.simple.finance;
+const routeKey = 'finance';
+---
+
+<BaseLayout
+  title={page.meta.title}
+  description={page.meta.description}
+  path={page.meta.canonicalPath}
+  lang={content.lang}
+  alternates={getAlternates(routeKey)}
+>
+  <SiteNav locale={locale} routeKey={routeKey} />
+  <SimplePageMain
+    kicker={page.kicker}
+    title={page.title}
+    lead={page.lead}
+    bullets={page.bullets}
+    cta={page.cta}
+    highlightsLabel={content.labels.highlights}
+  />
+  <SiteFooter left={content.footer.left} right={content.footer.right} />
+</BaseLayout>
+

@@ -1,32 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import SiteNav from '../../components/SiteNav.astro';
-import SiteFooter from '../../components/SiteFooter.astro';
-import SimplePageMain from '../../components/SimplePageMain.astro';
-import { getAlternates } from '../../content/i18n';
-import { pt } from '../../content/pt';
-
-const locale = 'pt';
-const routeKey = 'tourism';
-const page = pt.pages.simple.tourism;
+import RedirectPage from '../../components/RedirectPage.astro';
 ---
 
-<BaseLayout
-  title={page.meta.title}
-  description={page.meta.description}
-  path={page.meta.canonicalPath}
-  lang={pt.lang}
-  alternates={getAlternates(routeKey)}
->
-  <SiteNav locale={locale} routeKey={routeKey} />
-  <SimplePageMain
-    kicker={page.kicker}
-    title={page.title}
-    lead={page.lead}
-    bullets={page.bullets}
-    cta={page.cta}
-    highlightsLabel="Destaques"
-  />
-  <SiteFooter left={pt.footer.left} right={pt.footer.right} />
-</BaseLayout>
-
+<RedirectPage to="/pt/tourism" canonicalPath="/pt/tourism" routeKey="tourism" />

@@ -1,20 +1,29 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import SiteNav from '../../../components/SiteNav.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
-import { getAlternates } from '../../../content/i18n';
-import { en } from '../../../content/en';
+import SiteNav from '../../../components/SiteNav.astro';
+import { CONTENT, LOCALES, isLocale, getAlternates } from '../../../i18n';
 
-const locale = 'en';
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { lang: locale } }));
+}
+
+const localeParam = Astro.params.lang;
+if (!isLocale(localeParam)) {
+  throw new Error(`Invalid locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+const content = CONTENT[locale];
+const page = content.pages.core;
 const routeKey = 'core';
-const page = en.pages.core;
 ---
 
 <BaseLayout
   title={page.meta.title}
   description={page.meta.description}
   path={page.meta.canonicalPath}
-  lang={en.lang}
+  lang={content.lang}
   alternates={getAlternates(routeKey)}
 >
   <SiteNav locale={locale} routeKey={routeKey} />
@@ -27,7 +36,7 @@ const page = en.pages.core;
         <p class="lead">{page.heroLead}</p>
         <div class="hero-actions">
           <a class="button primary" href="#areas">{page.primaryCta}</a>
-          <a class="button" href={en.routes.home.path}>{page.secondaryCta}</a>
+          <a class="button" href={content.routes.home.path}>{page.secondaryCta}</a>
         </div>
       </div>
 

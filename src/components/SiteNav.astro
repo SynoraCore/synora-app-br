@@ -1,6 +1,6 @@
 ---
-import type { Locale, RouteKey } from '../content/types';
-import { getContent, getRoutePath } from '../content/i18n';
+import type { Locale, RouteKey } from '../i18n/types';
+import { getContent, getRoutePath } from '../i18n';
 
 type Props = {
   locale: Locale;
@@ -30,6 +30,7 @@ const navLinks =
       ];
 
 const ptHref = getRoutePath('pt', routeKey);
+const esHref = getRoutePath('es', routeKey);
 const enHref = getRoutePath('en', routeKey);
 ---
 
@@ -50,9 +51,22 @@ const enHref = getRoutePath('en', routeKey);
 
     <div class="nav-actions" aria-label="Actions">
       <div class="lang-switch" aria-label="Language selector">
-        <a class={locale === 'pt' ? 'is-active' : ''} href={ptHref} hreflang="pt-BR">{content.nav.langSwitch.pt}</a>
+        <a
+          class={locale === 'pt' ? 'is-active' : ''}
+          href={ptHref}
+          hreflang="pt-BR"
+          data-locale="pt"
+        >
+          {content.nav.langSwitch.pt}
+        </a>
         <span aria-hidden="true">|</span>
-        <a class={locale === 'en' ? 'is-active' : ''} href={enHref} hreflang="en">{content.nav.langSwitch.en}</a>
+        <a class={locale === 'es' ? 'is-active' : ''} href={esHref} hreflang="es" data-locale="es">
+          {content.nav.langSwitch.es}
+        </a>
+        <span aria-hidden="true">|</span>
+        <a class={locale === 'en' ? 'is-active' : ''} href={enHref} hreflang="en" data-locale="en">
+          {content.nav.langSwitch.en}
+        </a>
       </div>
       <a class={`button ${routeKey === 'core' ? 'is-active' : ''}`} href={content.routes.core.path}>
         {content.nav.coreCta}
@@ -60,3 +74,18 @@ const enHref = getRoutePath('en', routeKey);
     </div>
   </div>
 </nav>
+
+<script is:inline>
+  (function () {
+    const KEY = 'synora_lang';
+    const switchEl = document.querySelector('.lang-switch');
+    if (!switchEl) return;
+    switchEl.addEventListener('click', function (event) {
+      const target = event.target && event.target.closest ? event.target.closest('a[data-locale]') : null;
+      if (!target) return;
+      try {
+        window.localStorage.setItem(KEY, target.getAttribute('data-locale'));
+      } catch {}
+    });
+  })();
+</script>

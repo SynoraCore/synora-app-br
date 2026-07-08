@@ -4,13 +4,13 @@ export const en: LocaleContent = {
   locale: 'en',
   lang: 'en',
   routes: {
-    home: { path: '/en/' },
-    core: { path: '/en/core/' },
-    mediadora: { path: '/en/mediator/' },
-    tourism: { path: '/en/tourism/' },
-    audio: { path: '/en/audio/' },
-    finance: { path: '/en/finance/' },
-    international: { path: '/en/international/' }
+    home: { path: '/en' },
+    core: { path: '/en/core' },
+    mediadora: { path: '/en/mediadora' },
+    tourism: { path: '/en/tourism' },
+    audio: { path: '/en/audio' },
+    finance: { path: '/en/finance' },
+    international: { path: '/en/international' }
   },
   nav: {
     home: 'Home',
@@ -19,8 +19,10 @@ export const en: LocaleContent = {
     about: 'About',
     contact: 'Contact',
     coreCta: 'Core',
-    coreLabel: 'Core',
-    langSwitch: { pt: 'PT', en: 'EN' }
+    langSwitch: { pt: 'PT', es: 'ES', en: 'EN' }
+  },
+  labels: {
+    highlights: 'Highlights'
   },
   footer: {
     left: '© Synora Ecosystem. All rights reserved.',
@@ -32,7 +34,7 @@ export const en: LocaleContent = {
         title: 'Synora',
         description:
           'An intelligence, governance and operational ecosystem designed to orchestrate trusted digital workflows.',
-        canonicalPath: '/en/'
+        canonicalPath: '/en'
       },
       hero: {
         eyebrow: '● Synora Ecosystem',
@@ -53,7 +55,7 @@ export const en: LocaleContent = {
             desc: 'The central layer for institutional knowledge, identity, workflows, agents and orchestration.',
             meta: 'Knowledge • Identity • Orchestration',
             actionLabel: 'Access Core',
-            actionHref: '/en/core/'
+            actionHref: '/en/core'
           },
           {
             name: 'Guardian AI',
@@ -74,8 +76,8 @@ export const en: LocaleContent = {
         tag: 'solution',
         cards: [
           {
-            name: 'Synora Mediator',
-            desc: 'An intelligent platform for financial mediation and reorganization.',
+            name: 'Synora Mediadora',
+            desc: 'An institutional platform for financial mediation and reorganization.',
             meta: 'Mediation • Reorganization • Assisted operations'
           },
           {
@@ -113,7 +115,7 @@ export const en: LocaleContent = {
         title: 'Synora Core',
         description:
           'The knowledge and governance center of Synora: operational context, architecture, criteria and institutional evolution.',
-        canonicalPath: '/en/core/'
+        canonicalPath: '/en/core'
       },
       eyebrow: 'Restricted area',
       heroTitle: 'The knowledge and governance center of Synora.',
@@ -136,12 +138,12 @@ export const en: LocaleContent = {
         ['Memory', 'Active', 'Decisions, documents and context preserved'],
         ['Criteria', 'In progress', 'Policies and evidence for sensitive decisions'],
         ['Operations', 'Continuous', 'Agents, workflows and next milestones in order'],
-        ['Verticals', 'Connected', 'Mediator, Tourism, Audio and Finance on the same base']
+        ['Verticals', 'Connected', 'Mediadora, Tourism, Audio and Finance on the same base']
       ],
       principle: {
         kicker: 'Operating principle',
         title: 'Verticals create value. Guardian preserves trust. Core preserves knowledge.',
-        body: 'Synora connects these layers into an intelligent, auditable and evolving ecosystem. Core is where institutional context becomes structure, criteria and continuity.'
+        body: 'Synora connects these layers into an intelligence, auditable and evolving ecosystem. Core is where institutional context becomes structure, criteria and continuity.'
       },
       commandCenter: {
         kicker: 'Command center',
@@ -199,68 +201,63 @@ export const en: LocaleContent = {
     simple: {
       mediadora: {
         meta: {
-          title: 'Synora Mediator',
-          description:
-            'An intelligent platform for financial mediation and reorganization, supported by governance and assisted operations.',
-          canonicalPath: '/en/mediator/'
+          title: 'Synora Mediadora',
+          description: 'An institutional platform for financial mediation and reorganization, supported by governance and assisted operations.',
+          canonicalPath: '/en/mediadora'
         },
         kicker: 'Vertical',
         title: 'Mediation and reorganization with operational intelligence.',
         lead: 'A specialized solution built on the same Core and governance, designed for efficiency, traceability and assisted execution.',
         bullets: ['Workflow-driven assisted operations', 'Governed criteria and validations', 'Auditable trail for decisions and events'],
-        cta: { label: 'Back to Home', href: '/en/' }
+        cta: { label: 'Back to Home', href: '/en' }
       },
       tourism: {
         meta: {
           title: 'Synora Tourism',
-          description:
-            'Operational, financial and relationship intelligence for tourism and hospitality, with governance and interoperability.',
-          canonicalPath: '/en/tourism/'
+          description: 'Operational, financial and relationship intelligence for tourism and hospitality, with governance and interoperability.',
+          canonicalPath: '/en/tourism'
         },
         kicker: 'Vertical',
         title: 'Tourism and hospitality with connected operations.',
         lead: 'An operational layer to organize context, relationship and financial processes with shared ecosystem standards.',
         bullets: ['Operational routines and reporting', 'Interoperability standards', 'Governance for critical events'],
-        cta: { label: 'Back to Home', href: '/en/' }
+        cta: { label: 'Back to Home', href: '/en' }
       },
       audio: {
         meta: {
           title: 'Synora Audio',
-          description:
-            'Infrastructure to create, protect, distribute and monetize digital assets with governance and traceability.',
-          canonicalPath: '/en/audio/'
+          description: 'Infrastructure to create, protect, distribute and monetize digital assets with governance and traceability.',
+          canonicalPath: '/en/audio'
         },
         kicker: 'Vertical',
         title: 'Creation and distribution with protection and traceability.',
         lead: 'Infrastructure to operate digital assets with clear criteria, protection, distribution and controlled monetization.',
         bullets: ['Asset protection and integrity', 'Distribution and operational catalog', 'Metrics and traceability'],
-        cta: { label: 'Back to Home', href: '/en/' }
+        cta: { label: 'Back to Home', href: '/en' }
       },
       finance: {
         meta: {
           title: 'Synora Finance',
-          description:
-            'Intelligent financial infrastructure for managing, organizing and automating processes with governance and operational control.',
-          canonicalPath: '/en/finance/'
+          description: 'Intelligent financial infrastructure for managing, organizing and automating processes with governance and operational control.',
+          canonicalPath: '/en/finance'
         },
         kicker: 'Vertical',
         title: 'Financial organization with governed automation.',
         lead: 'A vertical to structure routines and financial workflows with continuous operations, interoperability and consistent criteria.',
         bullets: ['Automation with traceability', 'Governance for exceptions and critical events', 'Integration with ecosystem workflows'],
-        cta: { label: 'Back to Home', href: '/en/' }
+        cta: { label: 'Back to Home', href: '/en' }
       },
       international: {
         meta: {
           title: 'Synora International',
-          description:
-            'A strategic capability to operate natively across countries, languages, currencies and regulatory contexts with global governance.',
-          canonicalPath: '/en/international/'
+          description: 'A strategic capability to operate natively across countries, languages, currencies and regulatory contexts with global governance.',
+          canonicalPath: '/en/international'
         },
         kicker: 'Capability',
         title: 'Global governance. Local execution.',
         lead: 'Synora International adapts architecture, criteria and workflows to operate natively across countries with institutional consistency and local execution.',
         bullets: ['Sustainable expansion strategy', 'Multi-language and multi-currency layer', 'Regulatory adherence and context-driven governance'],
-        cta: { label: 'Back to Home', href: '/en/' }
+        cta: { label: 'Back to Home', href: '/en' }
       }
     }
   }

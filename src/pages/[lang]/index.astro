@@ -1,20 +1,29 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
-import { getAlternates } from '../../content/i18n';
-import { en } from '../../content/en';
+import SiteNav from '../../components/SiteNav.astro';
+import { CONTENT, LOCALES, isLocale, getAlternates } from '../../i18n';
 
-const locale = 'en';
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { lang: locale } }));
+}
+
+const localeParam = Astro.params.lang;
+if (!isLocale(localeParam)) {
+  throw new Error(`Invalid locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+const content = CONTENT[locale];
+const page = content.pages.home;
 const routeKey = 'home';
-const page = en.pages.home;
 ---
 
 <BaseLayout
   title={page.meta.title}
   description={page.meta.description}
   path={page.meta.canonicalPath}
-  lang={en.lang}
+  lang={content.lang}
   alternates={getAlternates(routeKey)}
 >
   <SiteNav locale={locale} routeKey={routeKey} variant="home" />
@@ -27,7 +36,7 @@ const page = en.pages.home;
         <p class="lead">{page.hero.lead}</p>
         <div class="hero-actions">
           <a class="button primary" href="#infraestrutura">{page.hero.primaryCta}</a>
-          <a class="button" href={en.routes.core.path}>{page.hero.secondaryCta}</a>
+          <a class="button" href={content.routes.core.path}>{page.hero.secondaryCta}</a>
         </div>
       </div>
       <div class="hero-system" aria-label="Synora ecosystem layers">
@@ -114,6 +123,6 @@ const page = en.pages.home;
     </section>
   </main>
 
-  <SiteFooter left={en.footer.left} right={en.footer.right} />
+  <SiteFooter left={content.footer.left} right={content.footer.right} />
 </BaseLayout>
 

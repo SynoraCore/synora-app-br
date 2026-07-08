@@ -1,0 +1,7 @@
+{
+  "redirects": [
+    { "source": "/en/mediator", "destination": "/en/mediadora", "permanent": true },
+    { "source": "/en/mediator/", "destination": "/en/mediadora", "permanent": true }
+  ]
+}
+

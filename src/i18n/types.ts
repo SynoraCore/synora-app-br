@@ -1,9 +1,4 @@
-export type Locale = 'pt' | 'en';
-
-export type NavItem = {
-  label: string;
-  href: string;
-};
+export type Locale = 'pt' | 'es' | 'en';
 
 export type PageMeta = {
   title: string;
@@ -33,11 +28,14 @@ export type LocaleContent = {
     about: string;
     contact: string;
     coreCta: string;
-    coreLabel: string;
     langSwitch: {
       pt: string;
+      es: string;
       en: string;
     };
+  };
+  labels: {
+    highlights: string;
   };
   footer: {
     left: string;

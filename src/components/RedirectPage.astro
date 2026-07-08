@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAlternates } from '../i18n';
+
+type Props = {
+  to: string;
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  routeKey?: Parameters<typeof getAlternates>[0];
+};
+
+const { to, title = 'Synora', description = 'Redirecting…', canonicalPath, routeKey } = Astro.props;
+const alternates = routeKey ? getAlternates(routeKey) : [];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path={canonicalPath ?? to}
+  alternates={alternates}
+>
+  <meta http-equiv="refresh" content={`0; url=${to}`} />
+  <main class="shell" style="padding: 120px 0;">
+    <p class="eyebrow">Redirect</p>
+    <h1>Redirecting…</h1>
+    <p class="lead">If you are not redirected automatically, follow the link below.</p>
+    <div class="hero-actions">
+      <a class="button primary" href={to}>Continue</a>
+    </div>
+  </main>
+  <script is:inline>
+    window.location.replace({JSON.stringify(to)});
+  </script>
+</BaseLayout>
+

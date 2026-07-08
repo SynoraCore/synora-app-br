@@ -1,118 +1,44 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SiteNav from '../components/SiteNav.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import { getAlternates } from '../content/i18n';
-import { pt } from '../content/pt';
+import { getAlternates } from '../i18n';
 
-const locale = 'pt';
 const routeKey = 'home';
-const page = pt.pages.home;
 ---
 
-<BaseLayout
-  title={page.meta.title}
-  description={page.meta.description}
-  path={page.meta.canonicalPath}
-  lang={pt.lang}
-  alternates={getAlternates(routeKey)}
->
-  <SiteNav locale={locale} routeKey={routeKey} variant="home" />
-
-  <main>
-    <section class="hero shell">
-      <div class="hero-copy">
-        <p class="eyebrow">{page.hero.eyebrow}</p>
-        <h1>{page.hero.title}</h1>
-        <p class="lead">{page.hero.lead}</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#infraestrutura">{page.hero.primaryCta}</a>
-          <a class="button" href={pt.routes.core.path}>{page.hero.secondaryCta}</a>
-        </div>
-      </div>
-      <div class="hero-system" aria-label="Camadas do ecossistema Synora">
-        <div class="system-orbit" aria-hidden="true"><span>Core</span></div>
-        <div class="system-grid">
-          {page.hero.systemPills.map((pill) => (
-            <div class="pill">{pill}</div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section id="infraestrutura" class="section shell">
-      <div class="section-head">
-        <p class="section-kicker">{page.infrastructure.kicker}</p>
-        <h2>{page.infrastructure.title}</h2>
-        <p class="section-copy">{page.infrastructure.copy}</p>
-      </div>
-
-      <div class="grid-3">
-        {page.infrastructure.cards.map((item) => (
-          <article class="card">
-            <div class="card-top">
-              <h3>{item.name}</h3>
-              <span class="tag">{page.infrastructure.tag}</span>
-            </div>
-            <p>{item.desc}</p>
-            <div class="meta">{item.meta}</div>
-            {item.actionLabel && item.actionHref && (
-              <div class="card-actions">
-                <a class="button primary" href={item.actionHref}>{item.actionLabel}</a>
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section id="solucoes" class="section shell">
-      <div class="section-head">
-        <p class="section-kicker">{page.solutions.kicker}</p>
-        <h2>{page.solutions.title}</h2>
-        <p class="section-copy">{page.solutions.copy}</p>
-      </div>
-
-      <div class="grid-2">
-        {page.solutions.cards.map((item) => (
-          <article class="card">
-            <div class="card-top">
-              <h3>{item.name}</h3>
-              <span class="tag">{page.solutions.tag}</span>
-            </div>
-            <p>{item.desc}</p>
-            <div class="meta">{item.meta}</div>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section id="sobre" class="section shell">
-      <div class="split">
-        <div class="section-head">
-          <p class="section-kicker">{page.about.kicker}</p>
-          <h2>{page.about.title}</h2>
-        </div>
-        <div class="panel">
-          <p>{page.about.body}</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contato" class="section shell">
-      <div class="panel contact-panel">
-        <div>
-          <p class="section-kicker">{page.contact.kicker}</p>
-          <h2>{page.contact.title}</h2>
-          <p class="section-copy">{page.contact.copy}</p>
-        </div>
-        <div class="contact-action">
-          <a class="button primary" href={`mailto:${page.contact.email}`}>{page.contact.ctaLabel}</a>
-          <span class="contact-email">{page.contact.email}</span>
-        </div>
-      </div>
-    </section>
+<BaseLayout title="Synora" description="International entrypoint" path="/" alternates={getAlternates(routeKey)}>
+  <main class="shell" style="padding: 120px 0;">
+    <p class="eyebrow">Synora</p>
+    <h1>Redirecting…</h1>
+    <p class="lead">Selecting the best language for your browser.</p>
+    <div class="hero-actions">
+      <a class="button" href="/pt">Português</a>
+      <a class="button" href="/es">Español</a>
+      <a class="button" href="/en">English</a>
+    </div>
   </main>
 
-  <SiteFooter left={pt.footer.left} right={pt.footer.right} />
+  <script is:inline>
+    (function () {
+      const KEY = 'synora_lang';
+      const supported = ['pt', 'es', 'en'];
+
+      function normalize(value) {
+        if (!value) return null;
+        const lower = String(value).toLowerCase();
+        if (lower.startsWith('pt')) return 'pt';
+        if (lower.startsWith('es')) return 'es';
+        return 'en';
+      }
+
+      const stored = normalize(window.localStorage.getItem(KEY));
+      const browser = normalize(navigator.language || (navigator.languages && navigator.languages[0]));
+      const chosen = supported.includes(stored) ? stored : supported.includes(browser) ? browser : 'en';
+
+      try {
+        window.localStorage.setItem(KEY, chosen);
+      } catch {}
+
+      window.location.replace('/' + chosen);
+    })();
+  </script>
 </BaseLayout>

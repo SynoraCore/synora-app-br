@@ -6,13 +6,15 @@ type Props = {
   title: string;
   description: string;
   path?: string;
+  lang?: string;
+  alternates?: Array<{ href: string; hreflang: string }>;
 };
 
-const { title, description, path = '/' } = Astro.props;
+const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,7 +24,7 @@ const { title, description, path = '/' } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <SeoHead title={title} description={description} path={path} />
+    <SeoHead title={title} description={description} path={path} alternates={alternates} />
   </head>
   <body>
     <slot />

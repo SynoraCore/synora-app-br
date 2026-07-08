@@ -1,0 +1,14 @@
+---
+type Props = {
+  left: string;
+  right: string;
+};
+
+const { left, right } = Astro.props;
+---
+
+<footer class="footer shell">
+  <span>{left}</span>
+  <span>{right}</span>
+</footer>
+

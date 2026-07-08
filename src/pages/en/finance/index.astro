@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteNav from '../../../components/SiteNav.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SimplePageMain from '../../../components/SimplePageMain.astro';
+import { getAlternates } from '../../../content/i18n';
+import { en } from '../../../content/en';
+
+const locale = 'en';
+const routeKey = 'finance';
+const page = en.pages.simple.finance;
+---
+
+<BaseLayout
+  title={page.meta.title}
+  description={page.meta.description}
+  path={page.meta.canonicalPath}
+  lang={en.lang}
+  alternates={getAlternates(routeKey)}
+>
+  <SiteNav locale={locale} routeKey={routeKey} />
+  <SimplePageMain
+    kicker={page.kicker}
+    title={page.title}
+    lead={page.lead}
+    bullets={page.bullets}
+    cta={page.cta}
+    highlightsLabel="Highlights"
+  />
+  <SiteFooter left={en.footer.left} right={en.footer.right} />
+</BaseLayout>
+

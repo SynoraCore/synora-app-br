@@ -1,20 +1,20 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import SiteNav from '../../components/SiteNav.astro';
-import SiteFooter from '../../components/SiteFooter.astro';
-import { getAlternates } from '../../content/i18n';
-import { pt } from '../../content/pt';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteNav from '../../../components/SiteNav.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import { getAlternates } from '../../../content/i18n';
+import { en } from '../../../content/en';
 
-const locale = 'pt';
+const locale = 'en';
 const routeKey = 'core';
-const page = pt.pages.core;
+const page = en.pages.core;
 ---
 
 <BaseLayout
   title={page.meta.title}
   description={page.meta.description}
   path={page.meta.canonicalPath}
-  lang={pt.lang}
+  lang={en.lang}
   alternates={getAlternates(routeKey)}
 >
   <SiteNav locale={locale} routeKey={routeKey} />
@@ -27,11 +27,11 @@ const page = pt.pages.core;
         <p class="lead">{page.heroLead}</p>
         <div class="hero-actions">
           <a class="button primary" href="#areas">{page.primaryCta}</a>
-          <a class="button" href={pt.routes.home.path}>{page.secondaryCta}</a>
+          <a class="button" href={en.routes.home.path}>{page.secondaryCta}</a>
         </div>
       </div>
 
-      <div class="core-command-panel core-command-panel-rich" aria-label="Painel institucional do Synora Core">
+      <div class="core-command-panel core-command-panel-rich" aria-label="Synora Core institutional panel">
         <div class="command-panel-head">
           <span>{page.panel.title}</span>
           <strong>{page.panel.subtitle}</strong>
@@ -50,7 +50,7 @@ const page = pt.pages.core;
     </section>
 
     <section id="status" class="section shell core-section-tight">
-      <div class="core-topbar" aria-label="Sintese do estado do Core">
+      <div class="core-topbar" aria-label="Core status summary">
         {page.statusCards.map(([label, value, detail]) => (
           <article class="card status-card">
             <p class="tag">{label}</p>
@@ -132,3 +132,4 @@ const page = pt.pages.core;
 
   <SiteFooter left={page.footerLeft} right={page.footerRight} />
 </BaseLayout>
+

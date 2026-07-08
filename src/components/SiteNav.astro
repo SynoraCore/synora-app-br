@@ -1,0 +1,62 @@
+---
+import type { Locale, RouteKey } from '../content/types';
+import { getContent, getRoutePath } from '../content/i18n';
+
+type Props = {
+  locale: Locale;
+  routeKey: RouteKey;
+  variant?: 'home' | 'internal';
+};
+
+const { locale, routeKey, variant = 'internal' } = Astro.props;
+const content = getContent(locale);
+const homePath = content.routes.home.path;
+
+const navLinks =
+  variant === 'home'
+    ? [
+        { label: content.nav.home, href: homePath },
+        { label: content.nav.infrastructure, href: '#infraestrutura' },
+        { label: content.nav.solutions, href: '#solucoes' },
+        { label: content.nav.about, href: '#sobre' },
+        { label: content.nav.contact, href: '#contato' }
+      ]
+    : [
+        { label: content.nav.home, href: homePath },
+        { label: content.nav.infrastructure, href: `${homePath}#infraestrutura` },
+        { label: content.nav.solutions, href: `${homePath}#solucoes` },
+        { label: content.nav.about, href: `${homePath}#sobre` },
+        { label: content.nav.contact, href: `${homePath}#contato` }
+      ];
+
+const ptHref = getRoutePath('pt', routeKey);
+const enHref = getRoutePath('en', routeKey);
+---
+
+<nav class="nav" aria-label="Primary navigation">
+  <div class="nav-inner shell">
+    <a class="brand" href={homePath}>
+      <span class="brand-mark" aria-hidden="true">
+        <img class="brand-logo" src="/brand/synora-mark.svg" alt="" />
+      </span>
+      <span>Synora</span>
+    </a>
+
+    <div class="nav-links" aria-label="Sections">
+      {navLinks.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </div>
+
+    <div class="nav-actions" aria-label="Actions">
+      <div class="lang-switch" aria-label="Language selector">
+        <a class={locale === 'pt' ? 'is-active' : ''} href={ptHref} hreflang="pt-BR">{content.nav.langSwitch.pt}</a>
+        <span aria-hidden="true">|</span>
+        <a class={locale === 'en' ? 'is-active' : ''} href={enHref} hreflang="en">{content.nav.langSwitch.en}</a>
+      </div>
+      <a class={`button ${routeKey === 'core' ? 'is-active' : ''}`} href={content.routes.core.path}>
+        {content.nav.coreCta}
+      </a>
+    </div>
+  </div>
+</nav>

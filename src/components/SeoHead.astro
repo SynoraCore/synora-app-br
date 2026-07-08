@@ -3,9 +3,10 @@ type Props = {
   title: string;
   description: string;
   path?: string;
+  alternates?: Array<{ href: string; hreflang: string }>;
 };
 
-const { title, description, path = '/' } = Astro.props;
+const { title, description, path = '/', alternates = [] } = Astro.props;
 const origin = 'https://synora.app.br';
 const canonicalUrl = new URL(path, origin).toString();
 ---
@@ -21,6 +22,9 @@ const canonicalUrl = new URL(path, origin).toString();
 <link rel="manifest" href="/site.webmanifest" />
 <meta name="theme-color" content="#304FFE" />
 <link rel="canonical" href={canonicalUrl} />
+{alternates.map((alt) => (
+  <link rel="alternate" hreflang={alt.hreflang} href={new URL(alt.href, origin).toString()} />
+))}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Synora" />
 <meta property="og:title" content={title} />

@@ -1,0 +1,36 @@
+---
+type Props = {
+  kicker: string;
+  title: string;
+  lead: string;
+  bullets: string[];
+  cta: { label: string; href: string };
+  highlightsLabel: string;
+};
+
+const { kicker, title, lead, bullets, cta, highlightsLabel } = Astro.props;
+---
+
+<main>
+  <section class="hero shell">
+    <div class="hero-copy">
+      <p class="eyebrow">{kicker}</p>
+      <h1>{title}</h1>
+      <p class="lead">{lead}</p>
+      <div class="hero-actions">
+        <a class="button primary" href={cta.href}>{cta.label}</a>
+      </div>
+    </div>
+
+    <div class="panel" aria-label="Operational highlights">
+      <p class="section-kicker">{highlightsLabel}</p>
+      <div class="core-pillar-list">
+        {bullets.map((line) => (
+          <article>
+            <strong>{line}</strong>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>

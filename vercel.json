@@ -1,7 +1,18 @@
 {
   "redirects": [
+    { "source": "/core", "destination": "/pt/core", "permanent": true },
+    { "source": "/core/", "destination": "/pt/core", "permanent": true },
+    { "source": "/mediadora", "destination": "/pt/mediadora", "permanent": true },
+    { "source": "/mediadora/", "destination": "/pt/mediadora", "permanent": true },
+    { "source": "/tourism", "destination": "/pt/tourism", "permanent": true },
+    { "source": "/tourism/", "destination": "/pt/tourism", "permanent": true },
+    { "source": "/audio", "destination": "/pt/audio", "permanent": true },
+    { "source": "/audio/", "destination": "/pt/audio", "permanent": true },
+    { "source": "/finance", "destination": "/pt/finance", "permanent": true },
+    { "source": "/finance/", "destination": "/pt/finance", "permanent": true },
+    { "source": "/international", "destination": "/pt/international", "permanent": true },
+    { "source": "/international/", "destination": "/pt/international", "permanent": true },
     { "source": "/en/mediator", "destination": "/en/mediadora", "permanent": true },
     { "source": "/en/mediator/", "destination": "/en/mediadora", "permanent": true }
   ]
 }
-

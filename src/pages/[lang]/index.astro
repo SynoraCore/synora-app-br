@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import SiteNav from '../../components/SiteNav.astro';
+import ConstellationOrbit from '../../components/ConstellationOrbit.astro';
 import { CONTENT, LOCALES, isLocale, getAlternates } from '../../i18n';
 
 export function getStaticPaths() {
@@ -40,12 +41,7 @@ const routeKey = 'home';
         </div>
       </div>
       <div class="hero-system" aria-label="Synora ecosystem layers">
-        <div class="system-orbit" aria-hidden="true"><span>Core</span></div>
-        <div class="system-grid">
-          {page.hero.systemPills.map((pill) => (
-            <div class="pill">{pill}</div>
-          ))}
-        </div>
+        <ConstellationOrbit coreLabel="Core" items={page.hero.systemPills.map((label) => ({ label }))} />
       </div>
     </section>
 
@@ -125,4 +121,3 @@ const routeKey = 'home';
 
   <SiteFooter left={content.footer.left} right={content.footer.right} />
 </BaseLayout>
-

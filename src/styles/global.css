@@ -362,6 +362,7 @@ h1 {
   aspect-ratio: 1;
   width: min(100%, 520px);
   margin-inline: auto;
+  --constellation-orbit-radius: clamp(168px, 14vw, 224px);
 }
 
 .constellation-ring {
@@ -426,7 +427,7 @@ h1 {
   left: 50%;
   transform:
     rotate(calc(var(--i) * 90deg))
-    translateX(clamp(124px, 11vw, 176px))
+    translateX(var(--constellation-orbit-radius))
     rotate(calc(var(--i) * -90deg));
   transform-origin: 0 0;
   z-index: 3;

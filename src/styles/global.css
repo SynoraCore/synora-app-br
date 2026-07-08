@@ -364,6 +364,7 @@ h1 {
   margin-inline: auto;
   --constellation-core-size: 112px;
   --constellation-core-clearspace: clamp(18px, calc(var(--constellation-core-size) / 5), 30px);
+  --constellation-node-breath: 0px;
   --constellation-orbit-radius: calc(
     (var(--constellation-core-size) / 2) + var(--constellation-core-clearspace) + clamp(92px, 9vw, 128px)
   );
@@ -431,10 +432,15 @@ h1 {
   left: 50%;
   transform:
     rotate(calc(var(--i) * 90deg))
-    translateX(var(--constellation-orbit-radius))
+    translateX(calc(var(--constellation-orbit-radius) + var(--constellation-node-breath)))
     rotate(calc(var(--i) * -90deg));
   transform-origin: 0 0;
   z-index: 3;
+}
+
+.constellation-node:hover {
+  --constellation-node-breath: clamp(6px, 0.7vw, 10px);
+  z-index: 4;
 }
 
 .constellation-counter {
@@ -443,26 +449,38 @@ h1 {
 }
 
 .constellation-chip {
-  border: 1px solid var(--line-soft);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
+    radial-gradient(circle at 50% 0%, rgba(79, 209, 255, 0.12), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
     rgba(255, 255, 255, 0.02);
-  border-radius: 14px;
-  padding: 12px 14px;
-  min-width: 150px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  min-width: 168px;
   text-align: center;
-  color: var(--muted);
+  color: rgba(245, 247, 251, 0.72);
   font-size: 13px;
   letter-spacing: 0.01em;
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(10px);
-  transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  box-shadow:
+    0 16px 55px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  transition:
+    box-shadow 200ms ease,
+    border-color 200ms ease,
+    background 200ms ease;
 }
 
 .constellation-chip:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
-  border-color: rgba(79, 209, 255, 0.22);
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(79, 209, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: rgba(79, 209, 255, 0.28);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(79, 209, 255, 0.18), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.02);
 }
 
 @keyframes constellation-spin {

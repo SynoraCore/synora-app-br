@@ -169,6 +169,10 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
             Promise.resolve(run)
               .catch(() => {})
               .finally(() => {
+                try {
+                  document.querySelector('[data-door-overlay]')?.remove();
+                } catch {}
+                lockBody(false);
                 window.location.assign(href);
               });
           });

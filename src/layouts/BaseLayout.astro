@@ -45,6 +45,11 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         window.matchMedia &&
         window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
+      const isChromiumLike =
+        typeof navigator !== 'undefined' &&
+        typeof navigator.userAgent === 'string' &&
+        /(Chrome|Chromium|OPR|Edg)\//.test(navigator.userAgent);
+
       function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
       }
@@ -133,7 +138,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
       }
 
       function setupDoorLinks() {
-        if (prefersSimpleDoor) return;
+        if (prefersSimpleDoor || isChromiumLike) return;
         const links = Array.from(document.querySelectorAll('a[data-door]'));
         if (!links.length) return;
 
@@ -180,7 +185,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
       }
 
       function setupExploreBack() {
-        if (prefersSimpleDoor) return;
+        if (prefersSimpleDoor || isChromiumLike) return;
         const backLinks = Array.from(document.querySelectorAll('a[data-explore-back]'));
         for (const link of backLinks) {
           link.addEventListener('click', (event) => {

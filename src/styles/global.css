@@ -1558,22 +1558,21 @@ h3 {
 
 .conversation-shell {
   max-width: 880px;
+  max-width: min(880px, 66ch);
+  font-size: 18px;
+  line-height: 1.65;
 }
 
 .conversation-head {
   padding: 2.5rem 0 1.5rem;
 }
 
-.conversation-eyebrow {
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.75;
-}
-
 .conversation-title {
   margin: 0;
+  max-width: 66ch;
+  font-size: clamp(28px, 2.6vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
 }
 
 .conversation-intro {
@@ -1617,4 +1616,19 @@ h3 {
 
 .conversation-act2-title {
   margin: 0;
+}
+
+.conversation-whisper {
+  margin: 0.85rem 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+@media (max-width: 520px) {
+  .conversation-shell {
+    font-size: 16px;
+  }
 }

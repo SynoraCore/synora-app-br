@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import SiteFooter from '../../../../components/SiteFooter.astro';
+import SiteNav from '../../../../components/SiteNav.astro';
+import { CONTENT, LOCALES, isLocale } from '../../../../i18n';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { lang: locale } }));
+}
+
+const localeParam = Astro.params.lang;
+if (!isLocale(localeParam)) {
+  throw new Error(`Invalid locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+const content = CONTENT[locale];
+
+const copy =
+  locale === 'pt'
+    ? {
+        title: 'Synora Audio',
+        intro:
+          'Antes de qualquer coisa: eu vou te fazer uma pergunta rápida. Responde no teu tempo.',
+        placeholder:
+          'Cole aqui o texto do Ato 1 (silêncio + primeira pergunta). Eu ajusto o ritmo, espaçamento e hierarquia.',
+        ctaPrimary: 'Entrar na página oficial do Audio',
+        ctaSecondary: '← Continuar explorando',
+      }
+    : locale === 'es'
+      ? {
+          title: 'Synora Audio',
+          intro: 'Antes que nada: te haré una pregunta rápida. Responde a tu ritmo.',
+          placeholder:
+            'Pega aquí el texto del Acto 1 (silencio + primera pregunta). Yo ajusto el ritmo, espaciado y jerarquía.',
+          ctaPrimary: 'Ir a la página oficial de Audio',
+          ctaSecondary: '← Seguir explorando',
+        }
+      : {
+          title: 'Synora Audio',
+          intro: 'Before anything: I’ll ask you a quick question. Answer at your pace.',
+          placeholder:
+            'Paste the Act 1 text here (silence + first question). I’ll refine rhythm, spacing, and hierarchy.',
+          ctaPrimary: 'Go to the official Audio page',
+          ctaSecondary: '← Keep exploring',
+        };
+
+const pageTitle = `${copy.title} — Conversa`;
+const pageDescription = copy.intro;
+const path = `${content.routes.audio.path}/conversa`;
+
+const alternates = [
+  { hreflang: 'pt-BR', href: `/pt/audio/conversa` },
+  { hreflang: 'es', href: `/es/audio/conversa` },
+  { hreflang: 'en', href: `/en/audio/conversa` },
+  { hreflang: 'x-default', href: '/' },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path={path}
+  lang={content.lang}
+  alternates={alternates}
+>
+  <SiteNav locale={locale} routeKey="audio" />
+
+  <div class="shell explore-shell">
+    <a class="explore-back" href={`${content.routes.home.path}#solucoes`}>
+      {copy.ctaSecondary}
+    </a>
+  </div>
+
+  <main class="shell section conversation-shell">
+    <header class="conversation-head">
+      <h1 class="conversation-title">{copy.title}</h1>
+      <p class="conversation-intro">{copy.intro}</p>
+    </header>
+
+    <section class="conversation-body" aria-label="Conversa">
+      <div class="conversation-placeholder">
+        <p>{copy.placeholder}</p>
+      </div>
+
+      <div class="conversation-actions">
+        <a class="button primary" href={content.routes.audio.path}>{copy.ctaPrimary}</a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter left={content.footer.left} right={content.footer.right} />
+</BaseLayout>

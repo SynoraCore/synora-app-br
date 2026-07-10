@@ -1555,3 +1555,31 @@ h3 {
     flex-direction: column;
   }
 }
+
+.conversation-shell {
+  max-width: 880px;
+}
+
+.conversation-head {
+  padding: 2.5rem 0 1.5rem;
+}
+
+.conversation-title {
+  margin: 0;
+}
+
+.conversation-intro {
+  margin: 0.75rem 0 0;
+  opacity: 0.9;
+}
+
+.conversation-placeholder {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.25rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.conversation-actions {
+  margin-top: 1.25rem;
+}

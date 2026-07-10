@@ -130,16 +130,44 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
           });
       }
 
-      function animateDoorReduced() {
-        const overlay = ensureDoorOverlay();
-        lockBody(true);
-        overlay.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 120, easing: 'linear', fill: 'forwards' });
-        return new Promise((r) => setTimeout(r, 140));
-      }
+	      function animateDoorReduced() {
+	        const overlay = ensureDoorOverlay();
+	        lockBody(true);
+	        overlay.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 120, easing: 'linear', fill: 'forwards' });
+	        return new Promise((r) => setTimeout(r, 140));
+	      }
 
-      function ensurePaperOverlay() {
-        let overlay = document.querySelector('[data-paper-overlay]');
-        if (!overlay) {
+	      const DEBUG_PAPER = (() => {
+	        try {
+	          if (new URLSearchParams(window.location.search).get('paper') === '1') return true;
+	        } catch {}
+	        try {
+	          return localStorage.getItem('paper:debug') === '1';
+	        } catch {}
+	        return false;
+	      })();
+
+	      function paperLog(name, data) {
+	        if (!DEBUG_PAPER) return;
+	        const payload = {
+	          t: Math.round(performance.now()),
+	          name,
+	          href: window.location.href,
+	          state: history && history.state,
+	          data,
+	        };
+	        try {
+	          window.__paperLog = window.__paperLog || [];
+	          window.__paperLog.push(payload);
+	        } catch {}
+	        try {
+	          console.log('[paper]', payload);
+	        } catch {}
+	      }
+
+	      function ensurePaperOverlay() {
+	        let overlay = document.querySelector('[data-paper-overlay]');
+	        if (!overlay) {
           overlay = document.createElement('div');
           overlay.dataset.paperOverlay = 'true';
           overlay.className = 'paper-overlay';
@@ -232,110 +260,123 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         } catch {}
       }
 
-      function setupPaperNavigation() {
-        window.addEventListener('popstate', () => {
-          const isOpen = document.documentElement.classList.contains('is-paper-open');
-          if (isOpen) closePaperOverlay({ restore: false });
-        });
+	      function setupPaperNavigation() {
+	        window.addEventListener('popstate', () => {
+	          paperLog('popstate');
+	          const isOpen = document.documentElement.classList.contains('is-paper-open');
+	          if (isOpen) closePaperOverlay({ restore: false });
+	        });
 
-        window.addEventListener('keydown', (event) => {
-          if (!(event instanceof KeyboardEvent)) return;
-          if (event.key !== 'Escape') return;
-          const isOpen = document.documentElement.classList.contains('is-paper-open');
+	        window.addEventListener('pageshow', (event) => {
+	          paperLog('pageshow', { persisted: Boolean(event && event.persisted) });
+	        });
+
+	        window.addEventListener('keydown', (event) => {
+	          if (!(event instanceof KeyboardEvent)) return;
+	          if (event.key !== 'Escape') return;
+	          const isOpen = document.documentElement.classList.contains('is-paper-open');
           if (!isOpen) return;
           event.preventDefault();
           closePaperOverlay({ restore: true });
         });
 
-        document.addEventListener('click', (event) => {
-          const overlay = document.querySelector('[data-paper-overlay]');
-          if (!overlay) return;
-          const isOpen = document.documentElement.classList.contains('is-paper-open');
+	        document.addEventListener('click', (event) => {
+	          const overlay = document.querySelector('[data-paper-overlay]');
+	          if (!overlay) return;
+	          const isOpen = document.documentElement.classList.contains('is-paper-open');
           if (!isOpen) return;
-          if (event.target !== overlay) return;
-          closePaperOverlay({ restore: true });
-        });
+	          if (event.target !== overlay) return;
+	          paperLog('overlay:click-out');
+	          closePaperOverlay({ restore: true });
+	        });
 
-        document.addEventListener('click', (event) => {
-          const target = event.target && event.target.closest ? event.target.closest('a[data-explore-back]') : null;
+	        document.addEventListener('click', (event) => {
+	          const target = event.target && event.target.closest ? event.target.closest('a[data-explore-back]') : null;
           if (!target) return;
-          const isOpen = document.documentElement.classList.contains('is-paper-open');
-          if (!isOpen) return;
-          event.preventDefault();
-          closePaperOverlay({ restore: true });
-        });
-      }
+	          const isOpen = document.documentElement.classList.contains('is-paper-open');
+	          if (!isOpen) return;
+	          event.preventDefault();
+	          paperLog('explore-back:preventDefault');
+	          closePaperOverlay({ restore: true });
+	        });
+	      }
 
-      function setupDoorLinks() {
-        if (prefersSimpleDoor || isChromiumLike) return;
-        const links = Array.from(document.querySelectorAll('a[data-door]'));
-        if (!links.length) return;
+	      function setupDoorLinks() {
+	        if (prefersSimpleDoor) return;
+	        if (isChromiumLike && !DEBUG_PAPER) return;
+	        const links = Array.from(document.querySelectorAll('a[data-door]'));
+	        if (!links.length) return;
 
-        for (const link of links) {
-          link.addEventListener('click', (event) => {
+	        for (const link of links) {
+	          link.addEventListener('click', (event) => {
             if (!(event instanceof MouseEvent)) return;
             if (event.defaultPrevented) return;
             if (event.button !== 0) return;
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-            const href = link.getAttribute('href');
-            if (!href) return;
+	            const href = link.getAttribute('href');
+	            if (!href) return;
 
-            event.preventDefault();
+	            paperLog('door:click', { href });
+	            event.preventDefault();
+	            paperLog('door:preventDefault', { href });
 
-            try {
-              sessionStorage.setItem(STORAGE.restoreUrl, window.location.pathname + window.location.search + window.location.hash);
-              sessionStorage.setItem(STORAGE.restoreScrollY, String(window.scrollY || 0));
-              sessionStorage.setItem(STORAGE.enter, '1');
-            } catch {}
+	            try {
+	              sessionStorage.setItem(STORAGE.restoreUrl, window.location.pathname + window.location.search + window.location.hash);
+	              sessionStorage.setItem(STORAGE.restoreScrollY, String(window.scrollY || 0));
+	              sessionStorage.setItem(STORAGE.enter, '1');
+	              paperLog('sessionStorage:set', { href });
+	            } catch {}
 
-            let run;
-            try {
-              run = prefersReducedMotion || prefersSimpleDoor ? animateDoorReduced() : animateDoorFromCard(link);
-            } catch {
+	            let run;
+	            try {
+	              run = prefersReducedMotion || prefersSimpleDoor ? animateDoorReduced() : animateDoorFromCard(link);
+	            } catch {
               try {
                 document.querySelector('[data-door-overlay]')?.remove();
               } catch {}
-              lockBody(false);
-              window.location.assign(href);
-              return;
-            }
-            Promise.resolve(run)
-              .catch(() => {})
-              .finally(() => {
-                try {
-                  document.querySelector('[data-door-overlay]')?.remove();
-                } catch {}
-                lockBody(false);
-                openPaperOverlay(href);
-              });
-          });
-        }
-      }
+	              lockBody(false);
+	              window.location.assign(href);
+	              return;
+	            }
+	            Promise.resolve(run)
+	              .catch(() => {})
+	              .finally(() => {
+	                try {
+	                  document.querySelector('[data-door-overlay]')?.remove();
+	                } catch {}
+	                lockBody(false);
+	                paperLog('overlay:open', { href });
+	                openPaperOverlay(href);
+	              });
+	          });
+	        }
+	      }
 
-      function setupExploreBack() {
-        if (prefersSimpleDoor || isChromiumLike) return;
-        const backLinks = Array.from(document.querySelectorAll('a[data-explore-back]'));
-        for (const link of backLinks) {
-          link.addEventListener('click', (event) => {
+	      function setupExploreBack() {
+	        if (prefersSimpleDoor) return;
+	        if (isChromiumLike && !DEBUG_PAPER) return;
+	        const backLinks = Array.from(document.querySelectorAll('a[data-explore-back]'));
+	        for (const link of backLinks) {
+	          link.addEventListener('click', (event) => {
             if (!(event instanceof MouseEvent)) return;
             if (event.defaultPrevented) return;
             if (event.button !== 0) return;
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-            const fallback = link.getAttribute('href') || '/';
-            event.preventDefault();
+	            const fallback = link.getAttribute('href') || '/';
+	            event.preventDefault();
 
-            let target = fallback;
-            try {
-              const restoreUrl = sessionStorage.getItem(STORAGE.restoreUrl);
-              if (restoreUrl) target = restoreUrl;
-            } catch {}
+	            let target = fallback;
+	            try {
+	              const restoreUrl = sessionStorage.getItem(STORAGE.restoreUrl);
+	              if (restoreUrl) target = restoreUrl;
+	            } catch {}
 
-            window.location.assign(target);
-          });
-        }
-      }
+	            window.location.assign(target);
+	          });
+	        }
+	      }
 
       function restoreScrollIfNeeded() {
         try {

@@ -93,8 +93,8 @@ html.is-door body {
   display: grid;
   place-items: center;
   padding: 84px var(--side-pad) 84px;
-  background: rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(10px) saturate(0.9) brightness(0.72);
+  background: rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px) saturate(0.9) brightness(0.78);
 }
 
 .paper-sheet {
@@ -102,10 +102,10 @@ html.is-door body {
   max-height: min(760px, calc(100svh - 168px));
   overflow: auto;
   border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(3, 12, 24, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(6, 12, 20, 0.74);
   box-shadow:
-    0 22px 70px rgba(0, 0, 0, 0.55),
+    0 18px 54px rgba(0, 0, 0, 0.42),
     0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
@@ -147,6 +147,10 @@ html.is-paper-open body {
 
 .paper-body .conversation-shell {
   padding-top: 0;
+}
+
+.conversation-spacer {
+  height: 0.95rem;
 }
 
 @media (max-width: 520px) {

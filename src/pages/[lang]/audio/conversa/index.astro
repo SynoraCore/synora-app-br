@@ -40,11 +40,15 @@ const copy =
             ],
           },
           { type: 'p', text: 'E aí...' },
+          { type: 'spacer' },
           { type: 'p', text: 'sem ninguém perceber...' },
+          { type: 'spacer' },
           { type: 'p', text: 'o mês muda de assunto.' },
+          { type: 'spacer' },
           { type: 'p', text: 'Não é sobre áudio.' },
           { type: 'p', text: 'Não é sobre arte.' },
           { type: 'p', text: 'Nem é sobre dinheiro.' },
+          { type: 'spacer' },
           { type: 'p', text: 'É sobre reconstruir uma história.' },
           { type: 'p', text: 'Quem participou.' },
           { type: 'p', text: 'Quem decidiu.' },
@@ -52,10 +56,12 @@ const copy =
           { type: 'p', text: 'O que mudou.' },
           { type: 'p', text: 'O que ficou registrado.' },
           { type: 'p', text: '(…)' },
+          { type: 'spacer' },
           {
             type: 'p',
             text: 'E quando cada pessoa lembra uma história diferente… até dividir o dinheiro vira briga.',
           },
+          { type: 'spacer' },
           { type: 'p', text: 'Talvez o problema nunca tenha sido a planilha.' },
           {
             type: 'p',
@@ -157,6 +163,8 @@ const alternates = [
                 <li>{item}</li>
               ))}
             </ul>
+          ) : block.type === 'spacer' ? (
+            <div class="conversation-spacer" aria-hidden="true" />
           ) : (
             <p>{block.text}</p>
           ),
@@ -178,6 +186,8 @@ const alternates = [
                     <li>{item}</li>
                   ))}
                 </ul>
+              ) : block.type === 'spacer' ? (
+                <div class="conversation-spacer" aria-hidden="true" />
               ) : (
                 <p>{block.text}</p>
               ),

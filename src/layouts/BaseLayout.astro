@@ -248,6 +248,15 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         });
 
         document.addEventListener('click', (event) => {
+          const overlay = document.querySelector('[data-paper-overlay]');
+          if (!overlay) return;
+          const isOpen = document.documentElement.classList.contains('is-paper-open');
+          if (!isOpen) return;
+          if (event.target !== overlay) return;
+          closePaperOverlay({ restore: true });
+        });
+
+        document.addEventListener('click', (event) => {
           const target = event.target && event.target.closest ? event.target.closest('a[data-explore-back]') : null;
           if (!target) return;
           const isOpen = document.documentElement.classList.contains('is-paper-open');

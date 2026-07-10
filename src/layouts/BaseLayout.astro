@@ -149,7 +149,17 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
               sessionStorage.setItem(STORAGE.enter, '1');
             } catch {}
 
-            const run = prefersReducedMotion ? animateDoorReduced() : animateDoorFromCard(link);
+            let run;
+            try {
+              run = prefersReducedMotion ? animateDoorReduced() : animateDoorFromCard(link);
+            } catch {
+              try {
+                document.querySelector('[data-door-overlay]')?.remove();
+              } catch {}
+              lockBody(false);
+              window.location.assign(href);
+              return;
+            }
             Promise.resolve(run)
               .catch(() => {})
               .finally(() => {

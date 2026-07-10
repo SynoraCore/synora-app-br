@@ -1,0 +1,76 @@
+---
+type Pillar = { title: string; body: string };
+
+type Props = {
+  headline: string;
+  subheadline: string;
+  pillars: [Pillar, Pillar, Pillar];
+  institutional: string;
+  evolution?: {
+    title: string;
+    steps: string[];
+    closing: string;
+  };
+};
+
+const { headline, subheadline, pillars, institutional, evolution } = Astro.props as Props;
+---
+
+<section class="section shell">
+  <div class="section-head">
+    <p class="section-kicker">Synora Audio</p>
+    <h1 style="max-width: 860px; font-size: clamp(46px, 5vw, 64px); line-height: 0.98;">
+      {headline}
+    </h1>
+    <p class="lead" style="max-width: 860px;">
+      {subheadline}
+    </p>
+  </div>
+
+  <div class="grid-3">
+    {pillars.map((p) => (
+      <article class="card">
+        <div class="card-top">
+          <h3>{p.title}</h3>
+          <span class="tag">pilar</span>
+        </div>
+        <p>{p.body}</p>
+      </article>
+    ))}
+  </div>
+
+  <div class="section" style="padding-bottom: 0;">
+    <div class="split">
+      <div class="section-head">
+        <p class="section-kicker">Mensagem institucional</p>
+        <h2>O que o cliente compra</h2>
+        <p class="section-copy">
+          Confiança na divisão do dinheiro — com clareza, prova e fechamento sem discussão.
+        </p>
+      </div>
+      <div class="panel">
+        <p>{institutional}</p>
+      </div>
+    </div>
+  </div>
+
+  {evolution ? (
+    <div class="section" style="padding-bottom: 0;">
+      <details class="panel" style="cursor: pointer;">
+        <summary style="list-style: none; font-weight: 750; letter-spacing: 0.01em;">
+          {evolution.title}
+          <span style="float: right; color: var(--muted); font-weight: 650;">Ver</span>
+        </summary>
+        <div style="margin-top: 16px;">
+          <ol style="margin: 0; padding-left: 20px; color: var(--muted); line-height: 1.7;">
+            {evolution.steps.map((s) => (
+              <li style="margin: 8px 0;">{s}</li>
+            ))}
+          </ol>
+          <p style="margin-top: 16px; color: var(--muted);">{evolution.closing}</p>
+        </div>
+      </details>
+    </div>
+  ) : null}
+</section>
+

@@ -80,14 +80,30 @@ const routeKey = 'home';
 
       <div class="grid-2">
         {page.solutions.cards.map((item) => (
-          <article class="card">
-            <div class="card-top">
-              <h3>{item.name}</h3>
-              <span class="tag">{page.solutions.tag}</span>
-            </div>
-            <p>{item.desc}</p>
-            <div class="meta">{item.meta}</div>
-          </article>
+          item.href ? (
+            <a
+              class="card card-link"
+              href={item.href}
+              data-door={item.href === content.routes.audio.path ? 'audio' : undefined}
+              data-door-label={item.href === content.routes.audio.path ? item.name : undefined}
+            >
+              <div class="card-top">
+                <h3>{item.name}</h3>
+                <span class="tag">{page.solutions.tag}</span>
+              </div>
+              <p>{item.desc}</p>
+              <div class="meta">{item.meta}</div>
+            </a>
+          ) : (
+            <article class="card">
+              <div class="card-top">
+                <h3>{item.name}</h3>
+                <span class="tag">{page.solutions.tag}</span>
+              </div>
+              <p>{item.desc}</p>
+              <div class="meta">{item.meta}</div>
+            </article>
+          )
         ))}
       </div>
     </section>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import SimplePageMain from '../../../components/SimplePageMain.astro';
+import AudioOfficialMessage from '../../../components/AudioOfficialMessage.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import SiteNav from '../../../components/SiteNav.astro';
 import { CONTENT, LOCALES, isLocale, getAlternates } from '../../../i18n';
@@ -18,6 +19,42 @@ const locale = localeParam;
 const content = CONTENT[locale];
 const page = content.pages.simple.audio;
 const routeKey = 'audio';
+
+const officialMessage =
+  locale === 'pt'
+    ? {
+        headline: 'A Synora Audio dá confiança na divisão do dinheiro.',
+        subheadline:
+          'Organize receitas compartilhadas: saiba quanto cada colaborador deve receber e registre cada pagamento com transparência — reduzindo tempo, erros e conflitos.',
+        pillars: [
+          {
+            title: 'Quem recebe quanto',
+            body: 'Saldos claros por colaborador, sempre atualizados.',
+          },
+          {
+            title: 'Pagamentos com prova',
+            body: 'Cada pagamento registrado com comprovação e histórico fácil de consultar.',
+          },
+          {
+            title: 'Fechamento sem briga',
+            body: 'Feche o mês com menos planilhas, menos dúvidas e menos retrabalho.',
+          },
+        ] as const,
+        institutional:
+          'A Synora Audio ajuda quem administra receitas compartilhadas a ter clareza imediata de quanto cada pessoa deve receber e a registrar cada pagamento com transparência. Em vez de depender de planilhas e comprovantes espalhados, você fecha o mês com saldos por colaborador e histórico de comprovação — reduzindo erros e conflitos.',
+        evolution: {
+          title: 'Como a narrativa evoluiu (e por quê isso importa)',
+          steps: [
+            'Plataforma de royalties.',
+            'Plataforma de royalties, splits e payouts.',
+            'Plataforma para organizar receitas compartilhadas.',
+            'Plataforma que dá confiança na divisão do dinheiro.',
+          ],
+          closing:
+            '“Divisão do dinheiro” não é um mercado — é um problema universal. Hoje aplicamos à música; amanhã pode sustentar outros cenários de receita compartilhada no ecossistema Synora.',
+        },
+      }
+    : null;
 ---
 
 <BaseLayout
@@ -28,14 +65,28 @@ const routeKey = 'audio';
   alternates={getAlternates(routeKey)}
 >
   <SiteNav locale={locale} routeKey={routeKey} />
-  <SimplePageMain
-    kicker={page.kicker}
-    title={page.title}
-    lead={page.lead}
-    bullets={page.bullets}
-    cta={page.cta}
-    highlightsLabel={content.labels.highlights}
-  />
+  <div class="shell explore-shell">
+    <a class="explore-back" href={`${content.routes.home.path}#solucoes`} data-explore-back>
+      ← Continuar explorando
+    </a>
+  </div>
+  {officialMessage ? (
+    <AudioOfficialMessage
+      headline={officialMessage.headline}
+      subheadline={officialMessage.subheadline}
+      pillars={officialMessage.pillars}
+      institutional={officialMessage.institutional}
+      evolution={officialMessage.evolution}
+    />
+  ) : (
+    <SimplePageMain
+      kicker={page.kicker}
+      title={page.title}
+      lead={page.lead}
+      bullets={page.bullets}
+      cta={page.cta}
+      highlightsLabel={content.labels.highlights}
+    />
+  )}
   <SiteFooter left={content.footer.left} right={content.footer.right} />
 </BaseLayout>
-

@@ -74,6 +74,7 @@ export type LocaleContent = {
           name: string;
           desc: string;
           meta: string;
+          href?: string;
         }>;
       };
       about: {
@@ -143,4 +144,3 @@ export type LocaleContent = {
     >;
   };
 };
-

@@ -78,22 +78,26 @@ export const pt: LocaleContent = {
           {
             name: 'Synora Mediadora',
             desc: 'Plataforma inteligente para mediação e reorganização financeira.',
-            meta: 'Mediação • Reorganização • Operação assistida'
+            meta: 'Mediação • Reorganização • Operação assistida',
+            href: '/pt/mediadora'
           },
           {
             name: 'Synora Tourism',
             desc: 'Inteligência operacional, financeira e de relacionamento para turismo e hospitalidade.',
-            meta: 'Turismo • Hospitalidade • Relacionamento'
+            meta: 'Turismo • Hospitalidade • Relacionamento',
+            href: '/pt/tourism'
           },
           {
             name: 'Synora Audio',
             desc: 'Infraestrutura para criação, proteção, distribuição e monetização de ativos digitais.',
-            meta: 'Criação • Proteção • Monetização'
+            meta: 'Criação • Proteção • Monetização',
+            href: '/pt/audio'
           },
           {
             name: 'Synora Finance',
             desc: 'Infraestrutura financeira inteligente para gestão, organização e automação de processos financeiros.',
-            meta: 'Gestão • Organização • Automação financeira'
+            meta: 'Gestão • Organização • Automação financeira',
+            href: '/pt/finance'
           }
         ]
       },
@@ -266,4 +270,3 @@ export const pt: LocaleContent = {
     }
   }
 };
-

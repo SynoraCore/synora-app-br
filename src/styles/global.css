@@ -66,6 +66,49 @@ body::after {
   opacity: 0.45;
 }
 
+html.is-door,
+html.is-door body {
+  overflow: hidden;
+}
+
+.door-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(6px) saturate(0.85) brightness(0.72);
+}
+
+.door-card {
+  pointer-events: none;
+  transform-origin: top left;
+}
+
+.explore-shell {
+  padding-top: 104px;
+}
+
+.explore-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.76);
+  letter-spacing: 0.01em;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(2, 11, 24, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.explore-back:hover {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.04);
+}
+
 @keyframes synora-fade-in {
   from {
     opacity: 0;
@@ -554,6 +597,11 @@ h1 {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
   border-color: rgba(255, 255, 255, 0.09);
   background: rgba(255, 255, 255, 0.035);
+}
+
+.card-link:focus-visible {
+  outline: 2px solid rgba(79, 209, 255, 0.55);
+  outline-offset: 3px;
 }
 
 .panel {

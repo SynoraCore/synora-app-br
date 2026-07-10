@@ -91,6 +91,8 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         const target = getTargetRect();
         const morphMs = 300;
         const pauseMs = 160;
+        const scaleX = target.width / Math.max(1, rect.width);
+        const scaleY = target.height / Math.max(1, rect.height);
 
         overlay.animate(
           [{ opacity: 0 }, { opacity: 1 }],
@@ -100,13 +102,11 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         const morph = clone.animate(
           [
             {
-              transform: 'translate3d(0,0,0) scale(1)',
+              transform: 'translate3d(0,0,0) scale(1, 1)',
               borderRadius: getComputedStyle(document.documentElement).getPropertyValue('--radius') || '20px',
             },
             {
-              transform: `translate3d(${target.left - rect.left}px, ${target.top - rect.top}px, 0)`,
-              width: target.width + 'px',
-              height: target.height + 'px',
+              transform: `translate3d(${target.left - rect.left}px, ${target.top - rect.top}px, 0) scale(${scaleX}, ${scaleY})`,
             },
           ],
           { duration: morphMs, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'forwards' }

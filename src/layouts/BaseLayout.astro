@@ -137,6 +137,126 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         return new Promise((r) => setTimeout(r, 140));
       }
 
+      function ensurePaperOverlay() {
+        let overlay = document.querySelector('[data-paper-overlay]');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.dataset.paperOverlay = 'true';
+          overlay.className = 'paper-overlay';
+
+          const sheet = document.createElement('div');
+          sheet.className = 'paper-sheet';
+          sheet.setAttribute('role', 'dialog');
+          sheet.setAttribute('aria-modal', 'true');
+          sheet.tabIndex = -1;
+          overlay.appendChild(sheet);
+
+          const head = document.createElement('div');
+          head.className = 'paper-head';
+
+          const close = document.createElement('button');
+          close.type = 'button';
+          close.className = 'paper-close';
+          close.textContent = '← Continuar explorando';
+          close.addEventListener('click', () => closePaperOverlay({ restore: true }));
+          head.appendChild(close);
+
+          sheet.appendChild(head);
+
+          const body = document.createElement('div');
+          body.className = 'paper-body';
+          sheet.appendChild(body);
+
+          document.body.appendChild(overlay);
+        }
+        return overlay;
+      }
+
+      function closePaperOverlay({ restore } = { restore: true }) {
+        const overlay = document.querySelector('[data-paper-overlay]');
+        if (!overlay) return;
+
+        try {
+          document.documentElement.classList.remove('is-paper-open');
+        } catch {}
+
+        overlay.remove();
+
+        if (!restore) return;
+
+        let target = '/';
+        try {
+          const restoreUrl = sessionStorage.getItem(STORAGE.restoreUrl);
+          if (restoreUrl) target = restoreUrl;
+        } catch {}
+
+        try {
+          history.replaceState(null, '', target);
+        } catch {}
+
+        restoreScrollIfNeeded();
+      }
+
+      async function openPaperOverlay(href) {
+        const overlay = ensurePaperOverlay();
+        const sheet = overlay.querySelector('.paper-sheet');
+        const body = overlay.querySelector('.paper-body');
+        if (!(sheet instanceof HTMLElement) || !(body instanceof HTMLElement)) {
+          window.location.assign(href);
+          return;
+        }
+
+        body.innerHTML = '';
+        document.documentElement.classList.add('is-paper-open');
+
+        try {
+          const res = await fetch(href, { headers: { Accept: 'text/html' } });
+          if (!res.ok) throw new Error('fetch failed');
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const main = doc.querySelector('main.conversation-shell') || doc.querySelector('main');
+          if (!main) throw new Error('missing main');
+          body.innerHTML = main.innerHTML;
+        } catch {
+          closePaperOverlay({ restore: false });
+          window.location.assign(href);
+          return;
+        }
+
+        try {
+          history.pushState({ paper: '1', href }, '', href);
+        } catch {}
+
+        try {
+          sheet.focus();
+        } catch {}
+      }
+
+      function setupPaperNavigation() {
+        window.addEventListener('popstate', () => {
+          const isOpen = document.documentElement.classList.contains('is-paper-open');
+          if (isOpen) closePaperOverlay({ restore: false });
+        });
+
+        window.addEventListener('keydown', (event) => {
+          if (!(event instanceof KeyboardEvent)) return;
+          if (event.key !== 'Escape') return;
+          const isOpen = document.documentElement.classList.contains('is-paper-open');
+          if (!isOpen) return;
+          event.preventDefault();
+          closePaperOverlay({ restore: true });
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target && event.target.closest ? event.target.closest('a[data-explore-back]') : null;
+          if (!target) return;
+          const isOpen = document.documentElement.classList.contains('is-paper-open');
+          if (!isOpen) return;
+          event.preventDefault();
+          closePaperOverlay({ restore: true });
+        });
+      }
+
       function setupDoorLinks() {
         if (prefersSimpleDoor || isChromiumLike) return;
         const links = Array.from(document.querySelectorAll('a[data-door]'));
@@ -178,7 +298,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
                   document.querySelector('[data-door-overlay]')?.remove();
                 } catch {}
                 lockBody(false);
-                window.location.assign(href);
+                openPaperOverlay(href);
               });
           });
         }
@@ -238,6 +358,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
       }
 
       setupDoorLinks();
+      setupPaperNavigation();
       setupExploreBack();
       restoreScrollIfNeeded();
       markDoorEnter();

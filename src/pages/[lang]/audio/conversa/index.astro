@@ -22,8 +22,7 @@ const copy =
         title: 'Synora Audio',
         intro:
           'Antes de qualquer coisa: eu vou te fazer uma pergunta rápida. Responde no teu tempo.',
-        placeholder:
-          'Cole aqui o texto do Ato 1 (silêncio + primeira pergunta). Eu ajusto o ritmo, espaçamento e hierarquia.',
+        body: ['(Silêncio.)', 'Qual é o som que está faltando no teu ecossistema hoje?'],
         ctaPrimary: 'Entrar na página oficial do Audio',
         ctaSecondary: '← Continuar explorando',
       }
@@ -31,16 +30,14 @@ const copy =
       ? {
           title: 'Synora Audio',
           intro: 'Antes que nada: te haré una pregunta rápida. Responde a tu ritmo.',
-          placeholder:
-            'Pega aquí el texto del Acto 1 (silencio + primera pregunta). Yo ajusto el ritmo, espaciado y jerarquía.',
+          body: ['(Silencio.)', '¿Qué sonido le falta hoy a tu ecosistema?'],
           ctaPrimary: 'Ir a la página oficial de Audio',
           ctaSecondary: '← Seguir explorando',
         }
       : {
           title: 'Synora Audio',
           intro: 'Before anything: I’ll ask you a quick question. Answer at your pace.',
-          placeholder:
-            'Paste the Act 1 text here (silence + first question). I’ll refine rhythm, spacing, and hierarchy.',
+          body: ['(Silence.)', 'What sound is missing from your ecosystem today?'],
           ctaPrimary: 'Go to the official Audio page',
           ctaSecondary: '← Keep exploring',
         };
@@ -79,8 +76,10 @@ const alternates = [
     </header>
 
     <section class="conversation-body" aria-label="Conversa">
-      <div class="conversation-placeholder">
-        <p>{copy.placeholder}</p>
+      <div class="conversation-copy">
+        {copy.body.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
       </div>
 
       <div class="conversation-actions">

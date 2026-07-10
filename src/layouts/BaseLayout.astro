@@ -133,6 +133,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
       }
 
       function setupDoorLinks() {
+        if (prefersSimpleDoor) return;
         const links = Array.from(document.querySelectorAll('a[data-door]'));
         if (!links.length) return;
 
@@ -175,6 +176,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
       }
 
       function setupExploreBack() {
+        if (prefersSimpleDoor) return;
         const backLinks = Array.from(document.querySelectorAll('a[data-explore-back]'));
         for (const link of backLinks) {
           link.addEventListener('click', (event) => {

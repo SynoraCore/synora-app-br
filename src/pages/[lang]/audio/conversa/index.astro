@@ -19,31 +19,104 @@ const content = CONTENT[locale];
 const copy =
   locale === 'pt'
     ? {
-        title: 'Synora Audio',
-        intro:
-          'Antes de qualquer coisa: eu vou te fazer uma pergunta rápida. Responde no teu tempo.',
-        body: ['(Silêncio.)', 'Qual é o som que está faltando no teu ecossistema hoje?'],
+        eyebrow: 'Synora Audio',
+        title: 'Quando foi a última vez que vocês fecharam um mês… sem virar investigação?',
+        description:
+          'Na teoria, parece simples. Na prática: “eu achei que isso já tinha sido pago”, “manda o link de novo”, “calma… deixa eu achar a mensagem”.',
+        act1: [
+          { type: 'p', text: 'Na teoria, parece simples.' },
+          { type: 'p', text: 'Na prática:' },
+          {
+            type: 'ul',
+            items: [
+              '“Eu achei que isso já tinha sido pago.”',
+              '“Tem o comprovante… só não sei onde.”',
+              '“Qual planilha é a última mesmo?”',
+              '“A versão certa… tá no meu computador.”',
+              '“Cada um lembra uma porcentagem.”',
+              '“O combinado era esse… ou era outro?”',
+              '“Manda o link de novo.”',
+              '“Calma… deixa eu achar a mensagem.”',
+            ],
+          },
+          { type: 'p', text: 'E aí...' },
+          { type: 'p', text: 'sem ninguém perceber...' },
+          { type: 'p', text: 'o mês muda de assunto.' },
+          { type: 'p', text: 'Não é sobre áudio.' },
+          { type: 'p', text: 'Não é sobre arte.' },
+          { type: 'p', text: 'Nem é sobre dinheiro.' },
+          { type: 'p', text: 'É sobre reconstruir uma história.' },
+          { type: 'p', text: 'Quem participou.' },
+          { type: 'p', text: 'Quem decidiu.' },
+          { type: 'p', text: 'O que foi aprovado.' },
+          { type: 'p', text: 'O que mudou.' },
+          { type: 'p', text: 'O que ficou registrado.' },
+          { type: 'p', text: '(…)' },
+          {
+            type: 'p',
+            text: 'E quando cada pessoa lembra uma história diferente… até dividir o dinheiro vira briga.',
+          },
+          { type: 'p', text: 'Talvez o problema nunca tenha sido a planilha.' },
+          {
+            type: 'p',
+            text: 'Talvez ela só esteja tentando juntar uma história que ficou espalhada em mensagens, links, arquivos e planilhas.',
+          },
+        ],
+        act1Cta: 'Continuar lendo',
+        act2Title: 'Se eu te pedisse agora…',
+        act2: [
+          { type: 'p', text: '“Me mostra o que aconteceu nesse lançamento — do começo ao fim.”' },
+          { type: 'p', text: 'Qual foi o primeiro lugar que veio à tua cabeça?' },
+          { type: 'p', text: 'WhatsApp?' },
+          { type: 'p', text: 'Drive?' },
+          { type: 'p', text: 'E-mail?' },
+          { type: 'p', text: 'E em que momento costuma aparecer:' },
+          { type: 'p', text: '“Pera… isso tá em outro lugar.”' },
+          { type: 'p', text: '(…)' },
+          { type: 'p', text: 'E no final…' },
+          { type: 'p', text: 'o mês fecha.' },
+          { type: 'p', text: 'Mas…' },
+          { type: 'p', text: 'como ele costuma fechar?' },
+          {
+            type: 'p',
+            text: '(Algumas equipes fecham no silêncio. Outras fecham no cansaço. Outras fecham na discussão. Qual é o teu caso?)',
+          },
+        ],
         ctaPrimary: 'Entrar na página oficial do Audio',
         ctaSecondary: '← Continuar explorando',
       }
     : locale === 'es'
       ? {
-          title: 'Synora Audio',
-          intro: 'Antes que nada: te haré una pregunta rápida. Responde a tu ritmo.',
-          body: ['(Silencio.)', '¿Qué sonido le falta hoy a tu ecosistema?'],
+          eyebrow: 'Synora Audio',
+          title: 'Conversación',
+          description: 'Antes que nada: te haré una pregunta rápida. Responde a tu ritmo.',
+          act1: [
+            { type: 'p', text: '(Silencio.)' },
+            { type: 'p', text: '¿Qué sonido le falta hoy a tu ecosistema?' },
+          ],
+          act1Cta: 'Seguir leyendo',
+          act2Title: ' ',
+          act2: [],
           ctaPrimary: 'Ir a la página oficial de Audio',
           ctaSecondary: '← Seguir explorando',
         }
       : {
-          title: 'Synora Audio',
-          intro: 'Before anything: I’ll ask you a quick question. Answer at your pace.',
-          body: ['(Silence.)', 'What sound is missing from your ecosystem today?'],
+          eyebrow: 'Synora Audio',
+          title: 'Conversation',
+          description: 'Before anything: I’ll ask you a quick question. Answer at your pace.',
+          act1: [
+            { type: 'p', text: '(Silence.)' },
+            { type: 'p', text: 'What sound is missing from your ecosystem today?' },
+          ],
+          act1Cta: 'Keep reading',
+          act2Title: ' ',
+          act2: [],
           ctaPrimary: 'Go to the official Audio page',
           ctaSecondary: '← Keep exploring',
         };
 
-const pageTitle = `${copy.title} — Conversa`;
-const pageDescription = copy.intro;
+const pageTitle = `${copy.eyebrow} — Conversa`;
+const pageDescription = copy.description;
 const path = `${content.routes.audio.path}/conversa`;
 
 const alternates = [
@@ -71,16 +144,48 @@ const alternates = [
 
   <main class="shell section conversation-shell">
     <header class="conversation-head">
+      <p class="conversation-eyebrow">{copy.eyebrow}</p>
       <h1 class="conversation-title">{copy.title}</h1>
-      <p class="conversation-intro">{copy.intro}</p>
+      <p class="conversation-intro">{copy.description}</p>
     </header>
 
     <section class="conversation-body" aria-label="Conversa">
       <div class="conversation-copy">
-        {copy.body.map((paragraph) => (
-          <p>{paragraph}</p>
-        ))}
+        {copy.act1.map((block) =>
+          block.type === 'ul' ? (
+            <ul class="conversation-list">
+              {block.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>{block.text}</p>
+          ),
+        )}
       </div>
+
+      <div class="conversation-actions">
+        <a class="button primary" href="#ato-2">{copy.act1Cta}</a>
+      </div>
+
+      {copy.act2.length > 0 && (
+        <div class="conversation-act2" id="ato-2">
+          <h2 class="conversation-act2-title">{copy.act2Title}</h2>
+          <div class="conversation-copy">
+            {copy.act2.map((block) =>
+              block.type === 'ul' ? (
+                <ul class="conversation-list">
+                  {block.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{block.text}</p>
+              ),
+            )}
+          </div>
+        </div>
+      )}
 
       <div class="conversation-actions">
         <a class="button primary" href={content.routes.audio.path}>{copy.ctaPrimary}</a>

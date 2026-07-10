@@ -40,6 +40,11 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
         window.matchMedia &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      const prefersSimpleDoor =
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
       function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
       }
@@ -151,7 +156,7 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
 
             let run;
             try {
-              run = prefersReducedMotion ? animateDoorReduced() : animateDoorFromCard(link);
+              run = prefersReducedMotion || prefersSimpleDoor ? animateDoorReduced() : animateDoorFromCard(link);
             } catch {
               try {
                 document.querySelector('[data-door-overlay]')?.remove();

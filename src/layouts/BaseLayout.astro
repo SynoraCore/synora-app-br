@@ -137,21 +137,32 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
 	        return new Promise((r) => setTimeout(r, 140));
 	      }
 
-	      const DEBUG_PAPER = (() => {
-	        try {
-	          if (new URLSearchParams(window.location.search).get('paper') === '1') return true;
-	        } catch {}
-	        try {
-	          return localStorage.getItem('paper:debug') === '1';
-	        } catch {}
-	        return false;
-	      })();
+		      const DEBUG_PAPER = (() => {
+		        try {
+		          if (new URLSearchParams(window.location.search).get('paper') === '1') return true;
+		        } catch {}
+		        try {
+		          return localStorage.getItem('paper:debug') === '1';
+		        } catch {}
+		        return false;
+		      })();
 
-	      function paperLog(name, data) {
-	        if (!DEBUG_PAPER) return;
-	        const payload = {
-	          t: Math.round(performance.now()),
-	          name,
+		      const PAPER_FALLBACK = (() => {
+		        try {
+		          const paper = new URLSearchParams(window.location.search).get('paper');
+		          if (paper === '0') return true;
+		        } catch {}
+		        try {
+		          return localStorage.getItem('paper:fallback') === '1';
+		        } catch {}
+		        return false;
+		      })();
+
+		      function paperLog(name, data) {
+		        if (!DEBUG_PAPER) return;
+		        const payload = {
+		          t: Math.round(performance.now()),
+		          name,
 	          href: window.location.href,
 	          state: history && history.state,
 	          data,
@@ -301,11 +312,11 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
 	        });
 	      }
 
-	      function setupDoorLinks() {
-	        if (prefersSimpleDoor) return;
-	        if (isChromiumLike && !DEBUG_PAPER) return;
-	        const links = Array.from(document.querySelectorAll('a[data-door]'));
-	        if (!links.length) return;
+		      function setupDoorLinks() {
+		        if (prefersSimpleDoor) return;
+		        if (PAPER_FALLBACK) return;
+		        const links = Array.from(document.querySelectorAll('a[data-door]'));
+		        if (!links.length) return;
 
 	        for (const link of links) {
 	          link.addEventListener('click', (event) => {
@@ -353,12 +364,12 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
 	        }
 	      }
 
-	      function setupExploreBack() {
-	        if (prefersSimpleDoor) return;
-	        if (isChromiumLike && !DEBUG_PAPER) return;
-	        const backLinks = Array.from(document.querySelectorAll('a[data-explore-back]'));
-	        for (const link of backLinks) {
-	          link.addEventListener('click', (event) => {
+		      function setupExploreBack() {
+		        if (prefersSimpleDoor) return;
+		        if (PAPER_FALLBACK) return;
+		        const backLinks = Array.from(document.querySelectorAll('a[data-explore-back]'));
+		        for (const link of backLinks) {
+		          link.addEventListener('click', (event) => {
             if (!(event instanceof MouseEvent)) return;
             if (event.defaultPrevented) return;
             if (event.button !== 0) return;

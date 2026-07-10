@@ -5,7 +5,7 @@ import { getContent, getRoutePath } from '../i18n';
 type Props = {
   locale: Locale;
   routeKey: RouteKey;
-  variant?: 'home' | 'internal';
+  variant?: 'home' | 'internal' | 'quiet';
 };
 
 const { locale, routeKey, variant = 'internal' } = Astro.props;
@@ -13,21 +13,23 @@ const content = getContent(locale);
 const homePath = content.routes.home.path;
 
 const navLinks =
-  variant === 'home'
-    ? [
-        { label: content.nav.home, href: homePath },
-        { label: content.nav.infrastructure, href: '#infraestrutura' },
-        { label: content.nav.solutions, href: '#solucoes' },
-        { label: content.nav.about, href: '#sobre' },
-        { label: content.nav.contact, href: '#contato' }
-      ]
-    : [
-        { label: content.nav.home, href: homePath },
-        { label: content.nav.infrastructure, href: `${homePath}#infraestrutura` },
-        { label: content.nav.solutions, href: `${homePath}#solucoes` },
-        { label: content.nav.about, href: `${homePath}#sobre` },
-        { label: content.nav.contact, href: `${homePath}#contato` }
-      ];
+  variant === 'quiet'
+    ? []
+    : variant === 'home'
+      ? [
+          { label: content.nav.home, href: homePath },
+          { label: content.nav.infrastructure, href: '#infraestrutura' },
+          { label: content.nav.solutions, href: '#solucoes' },
+          { label: content.nav.about, href: '#sobre' },
+          { label: content.nav.contact, href: '#contato' },
+        ]
+      : [
+          { label: content.nav.home, href: homePath },
+          { label: content.nav.infrastructure, href: `${homePath}#infraestrutura` },
+          { label: content.nav.solutions, href: `${homePath}#solucoes` },
+          { label: content.nav.about, href: `${homePath}#sobre` },
+          { label: content.nav.contact, href: `${homePath}#contato` },
+        ];
 
 const ptHref = getRoutePath('pt', routeKey);
 const esHref = getRoutePath('es', routeKey);
@@ -43,11 +45,13 @@ const enHref = getRoutePath('en', routeKey);
       <span>Synora</span>
     </a>
 
-    <div class="nav-links" aria-label="Sections">
-      {navLinks.map((item) => (
-        <a href={item.href}>{item.label}</a>
-      ))}
-    </div>
+    {navLinks.length > 0 && (
+      <div class="nav-links" aria-label="Sections">
+        {navLinks.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))}
+      </div>
+    )}
 
     <div class="nav-actions" aria-label="Actions">
       <div class="lang-switch" aria-label="Language selector">
@@ -68,9 +72,11 @@ const enHref = getRoutePath('en', routeKey);
           {content.nav.langSwitch.en}
         </a>
       </div>
-      <a class={`button ${routeKey === 'core' ? 'is-active' : ''}`} href={content.routes.core.path}>
-        {content.nav.coreCta}
-      </a>
+      {variant !== 'quiet' && (
+        <a class={`button ${routeKey === 'core' ? 'is-active' : ''}`} href={content.routes.core.path}>
+          {content.nav.coreCta}
+        </a>
+      )}
     </div>
   </div>
 </nav>

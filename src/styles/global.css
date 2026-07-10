@@ -1557,14 +1557,13 @@ h3 {
 }
 
 .conversation-shell {
-  max-width: 880px;
   max-width: min(880px, 66ch);
   font-size: 18px;
   line-height: 1.65;
 }
 
 .conversation-head {
-  padding: 2.5rem 0 1.5rem;
+  padding: 5.5rem 0 1.75rem;
 }
 
 .conversation-title {
@@ -1578,6 +1577,14 @@ h3 {
 .conversation-intro {
   margin: 0.75rem 0 0;
   opacity: 0.9;
+}
+
+html.is-door-enter .conversation-head {
+  animation: conversation-voice-in 420ms ease-out 160ms both;
+}
+
+html.is-door-enter .conversation-body {
+  animation: conversation-reveal 520ms ease-out 480ms both;
 }
 
 .conversation-placeholder {
@@ -1630,5 +1637,29 @@ h3 {
 @media (max-width: 520px) {
   .conversation-shell {
     font-size: 16px;
+  }
+
+  .conversation-head {
+    padding-top: 4.75rem;
+  }
+}
+
+@keyframes conversation-voice-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes conversation-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

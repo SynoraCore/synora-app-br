@@ -227,7 +227,7 @@ export const pt: LocaleContent = {
         title: 'Antes de promover um destino, compreenda-o.',
         lead: 'Compreendemos o território para coordenar decisões no turismo.',
         bullets: ['Compreensão do território', 'Coordenação entre atores', 'Mudanças no território'],
-        cta: { label: 'Vamos conversar.', href: '/pt' }
+        cta: { label: 'Vamos conversar.', href: '/pt#contato' }
       },
       audio: {
         meta: {

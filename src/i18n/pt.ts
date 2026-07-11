@@ -211,10 +211,14 @@ export const pt: LocaleContent = {
           canonicalPath: '/pt/mediadora'
         },
         kicker: 'Vertical',
-        title: 'Mediação e reorganização com inteligência operacional.',
-        lead: 'Uma solução especializada que opera sobre o mesmo Core e a mesma governança, com foco em eficiência, rastreabilidade e execução assistida.',
-        bullets: ['Operação assistida por workflow', 'Critérios e validações governadas', 'Rastro auditável de decisões e eventos'],
-        cta: { label: 'Voltar para Home', href: '/pt' }
+        title: 'Todo acordo começa quando existe uma compreensão compartilhada da realidade.',
+        lead: 'A plataforma não existe para impor decisões. Ela existe para construir acordos.',
+        bullets: [
+          'Resolução como infraestrutura: não depende de improviso operacional.',
+          'Disciplina institucional: processos estruturados para decisões sensíveis.',
+          'Reduz risco operacional e cria previsibilidade para escalar processos de mediação, negociação e resolução.'
+        ],
+        cta: { label: 'Vamos conversar.', href: '/pt#contato' }
       },
       tourism: {
         meta: {

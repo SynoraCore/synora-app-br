@@ -83,8 +83,8 @@ export const pt: LocaleContent = {
           },
           {
             name: 'Synora Tourism',
-            desc: 'Inteligência operacional, financeira e de relacionamento para turismo e hospitalidade.',
-            meta: 'Turismo • Hospitalidade • Relacionamento',
+            desc: 'Clareza sobre a dinâmica do território para coordenar decisões no turismo e na hospitalidade.',
+            meta: 'Território • Decisão • Coordenação',
             href: '/pt/tourism'
           },
           {
@@ -224,10 +224,10 @@ export const pt: LocaleContent = {
           canonicalPath: '/pt/tourism'
         },
         kicker: 'Vertical',
-        title: 'Turismo e hospitalidade com operação conectada.',
-        lead: 'Camada operacional para organizar contexto, relacionamento e processos financeiros do setor com padrões compartilhados do ecossistema Synora.',
-        bullets: ['Relatórios e rotinas operacionais', 'Padrões de interoperabilidade', 'Governança para eventos críticos'],
-        cta: { label: 'Voltar para Home', href: '/pt' }
+        title: 'Antes de promover um destino, compreenda-o.',
+        lead: 'Compreendemos o território para coordenar decisões no turismo.',
+        bullets: ['Compreensão do território', 'Coordenação entre atores', 'Mudanças no território'],
+        cta: { label: 'Vamos conversar.', href: '/pt' }
       },
       audio: {
         meta: {

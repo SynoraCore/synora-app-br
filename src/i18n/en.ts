@@ -77,8 +77,8 @@ export const en: LocaleContent = {
         cards: [
           {
             name: 'Synora Mediadora',
-            desc: 'An institutional platform for financial mediation and reorganization.',
-            meta: 'Mediation • Reorganization • Assisted operations',
+            desc: 'When reality is understood by everyone, agreements become possible.',
+            meta: 'Agreements • Evidence • Coordination',
             href: '/en/mediadora'
           },
           {

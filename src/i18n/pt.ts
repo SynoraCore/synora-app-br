@@ -223,12 +223,12 @@ export const pt: LocaleContent = {
             'Inteligência operacional, financeira e de relacionamento para turismo e hospitalidade, com governança e interoperabilidade.',
           canonicalPath: '/pt/tourism'
         },
-        kicker: 'Vertical',
-        title: 'Antes de promover um destino, compreenda-o.',
-        lead: 'Compreendemos o território para coordenar decisões no turismo.',
-        bullets: ['Compreensão do território', 'Coordenação entre atores', 'Mudanças no território'],
-        cta: { label: 'Vamos conversar.', href: '/pt#contato' }
-      },
+	        kicker: 'Vertical',
+	        title: 'Antes de promover um destino, compreenda-o.',
+	        lead: 'Decisões melhores começam com uma compreensão clara do território.',
+	        bullets: ['Compreensão do território', 'Coordenação entre atores', 'Mudanças no território'],
+	        cta: { label: 'Vamos conversar.', href: '/pt#contato' }
+	      },
       audio: {
         meta: {
           title: 'Synora Audio',

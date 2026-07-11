@@ -77,8 +77,8 @@ export const pt: LocaleContent = {
         cards: [
           {
             name: 'Synora Mediadora',
-            desc: 'Plataforma inteligente para mediação e reorganização financeira.',
-            meta: 'Mediação • Reorganização • Operação assistida',
+            desc: 'Quando a realidade é compreendida por todos, os acordos tornam-se possíveis.',
+            meta: 'Acordos • Evidências • Coordenação',
             href: '/pt/mediadora'
           },
           {

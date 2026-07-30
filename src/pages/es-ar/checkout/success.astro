@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { EDITIONS } from '../../../lib/protocolos';
+
+const edition = 'es-ar' as const;
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+const { market, lang } = editionMeta;
+
+const title = 'Compra concluída';
+const description = 'Pagamento confirmado. Você já pode abrir o protocolo.';
+const path = `/es-ar/checkout/success/`;
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <main class="shell protocolos">
+    <header class="protocol-header">
+      <p class="kicker">Checkout</p>
+      <h1>Compra concluída</h1>
+      <p class="lead">Confirmando pagamento…</p>
+    </header>
+
+    <section class="section">
+      <div class="panel">
+        <p class="muted-text">
+          Esta página é apenas experiência do usuário. A compra válida é certificada pelo webhook do Stripe.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" id="open" href="#" aria-disabled="true">Abrir meu protocolo</a>
+          <a class="button" href="/es-ar/protocolos/">Ver catálogo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script
+    type="application/json"
+    data-synora-success="config"
+    set:html={JSON.stringify({ edition, market, trackEndpoint: (import.meta.env.PUBLIC_TRACK_ENDPOINT || '').trim() })}
+  />
+  <script is:inline>
+    const jsonEl = document.currentScript?.previousElementSibling;
+    const raw = jsonEl?.getAttribute('data-synora-success') === 'config' ? jsonEl.textContent : null;
+    const cfg = raw ? JSON.parse(raw) : null;
+
+    const edition = cfg?.edition;
+    const market = cfg?.market;
+    const trackEndpoint = (cfg?.trackEndpoint || '').trim();
+
+    const params = new URLSearchParams(window.location.search);
+    const protocol_id = params.get('protocol_id') || 'P001';
+    const stripe_session_id = params.get('session_id') || '';
+
+    const open = document.getElementById('open');
+    const header = document.querySelector('.protocol-header .lead');
+
+    function setCta(enabled) {
+      if (!open) return;
+      if (enabled) {
+        open.setAttribute('aria-disabled', 'false');
+        open.classList.remove('disabled');
+      } else {
+        open.setAttribute('aria-disabled', 'true');
+        open.classList.add('disabled');
+        open.setAttribute('href', '#');
+      }
+    }
+
+    async function checkStatus() {
+      setCta(false);
+
+      if (!trackEndpoint || !stripe_session_id) {
+        if (header) header.textContent = stripe_session_id ? 'Aguardando confirmação do pagamento (webhook)…' : 'Volte pelo checkout.';
+        return;
+      }
+
+      const base = trackEndpoint.endsWith('/track')
+        ? trackEndpoint.slice(0, -'/track'.length)
+        : trackEndpoint.replace(/\/+$/, '');
+      const url = `${base}/checkout/status?session_id=${encodeURIComponent(stripe_session_id)}`;
+
+      const res = await fetch(url, { method: 'GET' }).catch(() => null);
+      const data = res ? await res.json().catch(() => null) : null;
+
+      const entitled = Boolean(data?.ok && data?.paid && data?.entitlement_active);
+      if (header) {
+        header.textContent = entitled
+          ? 'Pagamento confirmado. Acesso liberado.'
+          : 'Aguardando confirmação do pagamento (webhook)…';
+      }
+
+      if (!entitled) return;
+      if (String(data?.protocol_id || '') !== String(protocol_id || '')) return;
+
+      if (open) open.setAttribute('href', `/${edition}/deliver/${protocol_id}/?session_id=${encodeURIComponent(stripe_session_id)}`);
+      setCta(true);
+      window.synoraTrack?.({ event: 'checkout_returned', market, edition, protocol_id, content_id: 'checkout_success' });
+    }
+
+    checkStatus();
+    setTimeout(checkStatus, 2500);
+    setTimeout(checkStatus, 6000);
+  </script>
+</BaseLayout>

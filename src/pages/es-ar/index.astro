@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { EDITIONS } from '../../lib/protocolos';
+
+const edition = 'es-ar' as const;
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+
+const { lang } = editionMeta;
+const target = `/es-ar/protocolos/`;
+const title = 'Synora';
+const description =
+  'Ecossistema inteligente para governança, interoperabilidade, conhecimento e operações digitais especializadas.';
+const path = `/es-ar/`;
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <main class="shell" style="min-height: 100vh; display: grid; place-items: center; text-align: center;">
+    <div>
+      <h1 style="margin: 0 0 12px; font-size: 28px;">Redirecionando…</h1>
+      <p style="margin: 0 0 18px; opacity: 0.85;">Se não redirecionar automaticamente, use o link abaixo.</p>
+      <a class="button primary" href={target}>Ir para Protocolos</a>
+    </div>
+  </main>
+
+  <script define:vars={{ target }}>
+    window.location.replace(target);
+  </script>
+</BaseLayout>

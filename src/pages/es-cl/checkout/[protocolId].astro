@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Track from '../../../components/Track.astro';
+import { EDITIONS, getProtocolById, type ProtocolId } from '../../../lib/protocolos';
+import { installTrackOnWindow } from '../../../lib/track';
+
+const edition = 'es-cl' as const;
+const { protocolId } = Astro.params as { protocolId: ProtocolId };
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+const { market, lang } = editionMeta;
+
+const protocol = getProtocolById(protocolId);
+if (!protocol) throw new Error('Protocol not found');
+
+const title = `Checkout — ${protocol.title[edition]}`;
+const description = 'Checkout mínimo para instrumentar eventos do funil (MVP).';
+const path = `/${edition}/checkout/${protocolId}/`;
+
+const deliverHref = `/${edition}/deliver/${protocolId}/`;
+const isRealCheckout = edition === 'pt-br' && market === 'BR' && protocolId === 'P001';
+
+const trackEndpoint = (import.meta.env.PUBLIC_TRACK_ENDPOINT || '').trim();
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <Track
+    event="checkout_started"
+    payload={{
+      market,
+      edition,
+      protocol_id: protocol.protocol_id,
+      price: protocol.price[market].amount,
+      currency: protocol.price[market].currency,
+      path,
+    }}
+  />
+
+  <main class="shell protocolos">
+    <header class="protocol-header">
+      <p class="kicker">Checkout (MVP)</p>
+      <h1>{protocol.title[edition]}</h1>
+      <p class="lead">{protocol.price[market].display}</p>
+    </header>
+
+    <section class="section">
+      <div class="panel">
+        <p class="muted-text">{isRealCheckout ? 'Checkout real (Brasil) — pagamento via Stripe.' : 'Checkout simulado (MVP) para instrumentar eventos do funil.'}</p>
+        <div class="hero-actions">
+          {isRealCheckout ? (
+            <button
+              class="button primary"
+              type="button"
+              id="pay"
+              data-protocol-id={protocol.protocol_id}
+              data-market={market}
+              data-edition={edition}
+              data-track-endpoint={trackEndpoint}
+            >
+              Ir para pagamento
+            </button>
+          ) : (
+            <a
+              class="button primary"
+              href={deliverHref}
+              onClick={`window.synoraTrack?.({event:'purchase_completed',market:'${market}',edition:'${edition}',protocol_id:'${protocol.protocol_id}',price:${protocol.price[market].amount},currency:'${protocol.price[market].currency}',content_id:'checkout'})`}
+            >
+              Concluir compra (simulação)
+            </a>
+          )}
+          <a class="button" href={`/${edition}/protocolos/${protocol.slug[edition]}/`}>Voltar</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {isRealCheckout && (
+    <script type="module" define:vars={{ trackEndpoint }}>
+      import { track, installTrackOnWindow } from '../../../lib/track';
+      import { getAttribution } from '../../../lib/attribution';
+      installTrackOnWindow();
+
+      const btn = document.getElementById('pay');
+      if (btn) {
+        btn.addEventListener('click', async () => {
+          const protocol_id = btn.getAttribute('data-protocol-id');
+          const market = btn.getAttribute('data-market');
+          const edition = btn.getAttribute('data-edition');
+          const attribution = getAttribution();
+
+          track({ event: 'cta_click', content_id: 'checkout_pay', protocol_id, market, edition });
+
+          const endpoint = (trackEndpoint || '').trim();
+          if (!endpoint) {
+            alert('PUBLIC_TRACK_ENDPOINT não configurado.');
+            return;
+          }
+
+          // `PUBLIC_TRACK_ENDPOINT` aponta para /track; reaproveitamos o mesmo host para /checkout/create
+          const base = endpoint.endsWith('/track') ? endpoint.slice(0, -'/track'.length) : endpoint.replace(/\/+$/, '');
+          const url = `${base}/checkout/create`;
+
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              protocol_id,
+              market,
+              edition,
+              route_id: attribution.route_id,
+              source: attribution.source,
+              campaign: attribution.campaign,
+              medium: attribution.medium,
+              term: attribution.term,
+              content: attribution.content,
+              session_id: localStorage.getItem('synora_session_id'),
+            }),
+          }).catch(() => null);
+
+          if (!res) {
+            alert('Falha ao criar checkout.');
+            return;
+          }
+
+          const data = await res.json().catch(() => null);
+          if (!data?.ok || !data?.checkout_url) {
+            alert('Checkout indisponível.');
+            return;
+          }
+
+          window.location.href = data.checkout_url;
+        });
+      }
+    </script>
+  )}
+</BaseLayout>

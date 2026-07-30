@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Track from '../../../components/Track.astro';
+import { EDITIONS, getProtocolById } from '../../../lib/protocolos';
+import { buildRoutes } from '../../../lib/routes';
+
+const edition = 'pt-br' as const;
+const { route } = Astro.params as { route: string };
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+const { market, lang } = editionMeta;
+
+const routes = buildRoutes();
+const r = routes.find((x) => x.edition === edition && x.route_id === route);
+if (!r) throw new Error('Route not found');
+
+const protocol = getProtocolById(r.protocol_id);
+if (!protocol) throw new Error('Protocol not found');
+
+const protocolHref = `/pt-br/protocolos/${protocol.slug[edition]}/`;
+const title = r.question;
+const description = protocol.promise[edition];
+const path = `/pt-br/r/${route}/`;
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <Track event="content_view" payload={{ market, edition, route_id: route, protocol_id: protocol.protocol_id, content_id: 'route', path }} />
+
+  <nav class="nav" aria-label="Protocolos by Synora">
+    <div class="nav-inner shell">
+      <a class="brand" href={`/${edition}/protocolos/`}>
+        <span class="brand-mark" aria-hidden="true">
+          <img src="/brand/synora-mark.white-transparent.png" alt="" width="22" height="22" />
+        </span>
+        <span>Protocolos</span>
+      </a>
+    </div>
+  </nav>
+
+  <main class="shell protocolos">
+    <header class="protocolos-hero">
+      <h1>{r.question}</h1>
+      <p>{protocol.promise[edition]}</p>
+      <div class="hero-actions">
+        <a
+          class="button primary"
+          href={protocolHref}
+          onClick={`localStorage.setItem('synora_attribution_v1', JSON.stringify({...JSON.parse(localStorage.getItem('synora_attribution_v1')||'{}'), route_id:'${route}', protocol_id:'${protocol.protocol_id}', edition:'${edition}'})); window.synoraTrack?.({event:'cta_click',market:'${market}',edition:'${edition}',route_id:'${route}',protocol_id:'${protocol.protocol_id}',content_id:'route'})`}
+        >
+          {protocol.primary_cta[edition]}
+        </a>
+        <a class="button" href={`/${edition}/protocolos/`}>Ver catálogo</a>
+      </div>
+    </header>
+  </main>
+</BaseLayout>

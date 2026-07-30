@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Track from '../../../components/Track.astro';
+import { EDITIONS, PROTOCOLS } from '../../../lib/protocolos';
+
+const edition = 'es-ar' as const;
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+
+const { market, lang } = editionMeta;
+const title = 'Protocolos by Synora';
+const description =
+  'Métodos práticos para problemas reais. Escolha uma situação, siga o protocolo e use IA para chegar a um resultado.';
+const path = `/es-ar/protocolos/`;
+
+const cta = '¿Qué necesitás resolver hoy?';
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <Track event="content_view" payload={{ market, edition, content_id: 'home', path }} />
+
+  <nav class="nav" aria-label="Protocolos by Synora">
+    <div class="nav-inner shell">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="/brand/synora-mark.white-transparent.png" alt="" width="22" height="22" />
+        </span>
+        <span>Synora</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-pill" href={`/${edition}/protocolos/`}>Protocolos</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="shell protocolos">
+    <header class="protocolos-hero">
+      <h1>{cta}</h1>
+      <p>{description}</p>
+    </header>
+
+    <section class="section">
+      <div class="grid-2">
+        {PROTOCOLS.map((p) => {
+          const href = `/${edition}/protocolos/${p.slug[edition]}/`;
+          const isLive = p.status === 'live';
+          return (
+            <article class={`card ${isLive ? '' : 'muted'}`}>
+              <div class="card-top">
+                <h3>{p.title[edition]}</h3>
+                <span class="tag">{isLive ? 'live' : 'em breve'}</span>
+              </div>
+              <p>{p.promise[edition]}</p>
+              {p.deliverables[edition].length > 0 && (
+                <ul class="mini-list">
+                  {p.deliverables[edition].slice(0, 3).map((d) => (
+                    <li>{d}</li>
+                  ))}
+                </ul>
+              )}
+              <div class="card-bottom">
+                <span class="price">{p.price[market].display}</span>
+                <a
+                  class={`button ${isLive ? 'primary' : ''}`}
+                  href={href}
+                  data-protocol-id={p.protocol_id}
+                  onClick={`window.synoraTrack?.({event:'cta_click',market:'${market}',edition:'${edition}',protocol_id:'${p.protocol_id}',content_id:'home'})`}
+                >
+                  {isLive ? p.primary_cta[edition] : p.primary_cta[edition]}
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

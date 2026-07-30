@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Track from '../../../components/Track.astro';
+import { EDITIONS, getProtocolBySlug } from '../../../lib/protocolos';
+
+const edition = 'pt-br' as const;
+const { slug } = Astro.params as { slug: string };
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+const { market, lang } = editionMeta;
+
+const protocol = getProtocolBySlug(edition, slug);
+if (!protocol) throw new Error('Protocol not found');
+
+const title = protocol.title[edition];
+const description = protocol.promise[edition];
+const path = `/pt-br/protocolos/${slug}/`;
+
+const checkoutHref = `/pt-br/checkout/${protocol.protocol_id}/`;
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <Track event="protocol_view" payload={{ market, edition, protocol_id: protocol.protocol_id, path }} />
+
+  <nav class="nav" aria-label="Protocolos by Synora">
+    <div class="nav-inner shell">
+      <a class="brand" href={`/${edition}/protocolos/`}>
+        <span class="brand-mark" aria-hidden="true">
+          <img src="/brand/synora-mark.white-transparent.png" alt="" width="22" height="22" />
+        </span>
+        <span>Protocolos</span>
+      </a>
+      <div class="nav-links">
+        <a href={`/${edition}/protocolos/`}>Catálogo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="shell protocolos">
+    <header class="protocol-header">
+      <p class="kicker">Protocolos by Synora</p>
+      <h1>{protocol.title[edition]}</h1>
+      <p class="lead">{protocol.promise[edition]}</p>
+    </header>
+
+    <section class="section">
+      <div class="panel">
+        <h2>O que você obtém</h2>
+        <ul class="checklist">
+          {protocol.deliverables[edition].map((d) => (
+            <li>{d}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Preço</h2>
+        <div class="price-row">
+          <span class="price big">{protocol.price[market].display}</span>
+          <a
+            class="button primary"
+            href={checkoutHref}
+            onClick={`window.synoraTrack?.({event:'cta_click',market:'${market}',edition:'${edition}',protocol_id:'${protocol.protocol_id}',content_id:'protocol'})`}
+          >
+            {protocol.primary_cta[edition]}
+          </a>
+        </div>
+        {protocol.status !== 'live' && <p class="muted-text">Este protocolo está em preparação. O checkout abaixo é uma simulação do funil.</p>}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

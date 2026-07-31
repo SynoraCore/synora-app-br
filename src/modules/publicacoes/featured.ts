@@ -1,1 +1,1 @@
-export const featuredSlugs: string[] = ['uma-publicacao-demo'];
+export const featuredSlugs: string[] = ['quando-duas-observacoes-independentes-convergem'];

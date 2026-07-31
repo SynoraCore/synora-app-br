@@ -10,7 +10,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "publicacoes:new": "node scripts/publicacoes/new.mjs",
+    "publicacoes:check": "node scripts/publicacoes/check.mjs",
+    "publicacoes:featured": "node scripts/publicacoes/featured.mjs",
+    "publicacoes:related": "node scripts/publicacoes/related.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

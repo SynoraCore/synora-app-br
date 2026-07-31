@@ -1,0 +1,19 @@
+---
+type Props = {
+  updatedAt?: Date;
+};
+
+const { updatedAt } = Astro.props;
+if (!updatedAt) {
+  return null;
+}
+
+const dateIso = updatedAt.toISOString();
+const dateUi = updatedAt.toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: '2-digit' });
+---
+
+<aside class="pub-updated" aria-label="Atualização">
+  <span>Atualizado em</span>
+  <time datetime={dateIso}>{dateUi}</time>
+</aside>
+

@@ -1,0 +1,15 @@
+---
+type Props = {
+  ogImage?: string;
+  twitterImage?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+};
+
+const { ogImage, twitterImage, publishedTime, modifiedTime } = Astro.props;
+---
+
+{ogImage && <meta property="og:image" content={ogImage} />}
+{twitterImage && <meta name="twitter:image" content={twitterImage} />}
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}

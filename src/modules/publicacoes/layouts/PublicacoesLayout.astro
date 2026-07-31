@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PublicationHead from '../components/PublicationHead.astro';
+import '../styles/publicacoes.css';
+
+type Props = {
+  title: string;
+  description: string;
+  path?: string;
+  ogType?: 'website' | 'article';
+  head?: {
+    ogImage?: string;
+    twitterImage?: string;
+    publishedTime?: string;
+    modifiedTime?: string;
+  };
+};
+
+const { title, description, path = '/', ogType, head } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} path={path} ogType={ogType}>
+  <PublicationHead slot="head" {...head} />
+  <main class="pub-main">
+    <slot />
+  </main>
+</BaseLayout>

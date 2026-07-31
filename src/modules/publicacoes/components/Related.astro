@@ -1,0 +1,36 @@
+---
+type RelatedItem = {
+  href: string;
+  title: string;
+  dek: string;
+  type: string;
+  domain: string;
+  publishedAt: Date;
+};
+
+type Props = {
+  items?: RelatedItem[];
+};
+
+const { items } = Astro.props;
+if (!items?.length) {
+  return null;
+}
+---
+
+<section class="pub-related" aria-label="Related">
+  <h2 class="pub-section-title">Continue esta investigação</h2>
+  <div class="pub-related-list">
+    {items.map((item) => (
+      <a class="pub-related-item" href={item.href}>
+        <div class="pub-related-meta">
+          <span class="pub-pill">{item.domain}</span>
+          <span class="pub-pill">{item.type}</span>
+        </div>
+        <strong>{item.title}</strong>
+        <p>{item.dek}</p>
+      </a>
+    ))}
+  </div>
+</section>
+

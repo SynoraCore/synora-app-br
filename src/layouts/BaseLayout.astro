@@ -8,9 +8,17 @@ type Props = {
   path?: string;
   lang?: string;
   alternates?: Array<{ href: string; hreflang: string }>;
+  ogType?: 'website' | 'article';
 };
 
-const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astro.props;
+const {
+  title,
+  description,
+  path = '/',
+  lang = 'pt-BR',
+  alternates = [],
+  ogType = 'website',
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -24,7 +32,14 @@ const { title, description, path = '/', lang = 'pt-BR', alternates = [] } = Astr
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <SeoHead title={title} description={description} path={path} alternates={alternates} />
+    <SeoHead
+      title={title}
+      description={description}
+      path={path}
+      alternates={alternates}
+      ogType={ogType}
+    />
+    <slot name="head" />
   </head>
   <body>
     <slot />

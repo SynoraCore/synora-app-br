@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+type Publication = CollectionEntry<'publicacoes'>;
+
+type Props = {
+  entry: Publication;
+  href: string;
+};
+
+const { entry, href } = Astro.props;
+
+const { title, dek, type, domain, published_at: publishedAt, hero, hero_alt: heroAlt } = entry.data as {
+  title: string;
+  dek: string;
+  type: string;
+  domain: string;
+  published_at: Date;
+  hero?: ImageMetadata;
+  hero_alt?: string;
+};
+
+const dateIso = publishedAt.toISOString();
+const dateUi = publishedAt.toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: '2-digit' });
+---
+
+<a class="pub-featured" href={href}>
+  {hero && (
+    <div class="pub-featured-media">
+      <Image src={hero} alt={heroAlt ?? ''} loading="lazy" decoding="async" />
+    </div>
+  )}
+
+  <div class="pub-featured-body">
+    <div class="pub-featured-meta">
+      <span class="pub-featured-kicker">
+        <span class="pub-pill">{type}</span>
+        <span class="pub-pill">{domain}</span>
+      </span>
+      <time datetime={dateIso}>{dateUi}</time>
+    </div>
+    <strong class="pub-featured-title">{title}</strong>
+    <p class="pub-featured-dek">{dek}</p>
+  </div>
+</a>
+

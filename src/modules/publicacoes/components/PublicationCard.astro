@@ -1,0 +1,37 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+type Props = {
+  href: string;
+  title: string;
+  dek: string;
+  type: string;
+  domain: string;
+  publishedAt: Date;
+  hero?: ImageMetadata;
+  heroAlt?: string;
+};
+
+const { href, title, dek, type, domain, publishedAt, hero, heroAlt } = Astro.props;
+const dateIso = publishedAt.toISOString();
+const dateUi = publishedAt.toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: '2-digit' });
+---
+
+<a class="pub-card" href={href}>
+  {hero && (
+    <div class="pub-card-media">
+      <Image src={hero} alt={heroAlt ?? ''} loading="lazy" decoding="async" />
+    </div>
+  )}
+  <div class="pub-card-body">
+    <div class="pub-card-meta">
+      <span class="pub-pill">{domain}</span>
+      <span class="pub-pill">{type}</span>
+      <time datetime={dateIso}>{dateUi}</time>
+    </div>
+    <strong class="pub-card-title">{title}</strong>
+    <p class="pub-card-dek">{dek}</p>
+  </div>
+</a>
+

@@ -1,0 +1,95 @@
+---
+import { getCollection, render } from 'astro:content';
+import PublicacoesLayout from '../../../modules/publicacoes/layouts/PublicacoesLayout.astro';
+import PublicationHero from '../../../modules/publicacoes/components/PublicationHero.astro';
+import UpdatedNotice from '../../../modules/publicacoes/components/UpdatedNotice.astro';
+import Related from '../../../modules/publicacoes/components/Related.astro';
+import { asHrefPtPublicacoes } from '../../../modules/publicacoes/lib/publications';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('publicacoes');
+  const published = entries.filter((entry) => entry.data.language === 'pt-BR' && entry.data.status === 'published');
+
+  return published.map((entry) => ({
+    params: { slug: entry.data.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+
+const entries = await getCollection('publicacoes');
+const entry = entries.find(
+  (candidate) => candidate.data.language === 'pt-BR' && candidate.data.status === 'published' && candidate.data.slug === slug
+);
+
+if (!entry) {
+  return Astro.redirect('/404');
+}
+
+const { Content } = await render(entry);
+
+const relatedSlugs = entry.data.related ?? [];
+const relatedItems = entries
+  .filter(
+    (candidate) =>
+      candidate.data.language === 'pt-BR' &&
+      candidate.data.status === 'published' &&
+      relatedSlugs.includes(candidate.data.slug) &&
+      candidate.data.slug !== entry.data.slug
+  )
+  .map((candidate) => ({
+    href: asHrefPtPublicacoes(candidate.data.slug),
+    title: candidate.data.title,
+    dek: candidate.data.dek,
+    type: candidate.data.type,
+    domain: candidate.data.domain,
+    publishedAt: candidate.data.published_at
+  }))
+  .slice(0, 3);
+
+const title = entry.data.title;
+const description = entry.data.dek;
+const path = asHrefPtPublicacoes(entry.data.slug);
+const origin = 'https://synora.app.br';
+const publishedTime = entry.data.published_at.toISOString();
+const modifiedTime = entry.data.updated_at ? entry.data.updated_at.toISOString() : undefined;
+const ogImage = entry.data.hero ? new URL(entry.data.hero.src, origin).toString() : undefined;
+---
+
+<PublicacoesLayout
+  title={`${title} | Synora`}
+  description={description}
+  path={path}
+  ogType="article"
+  head={{
+    ogImage,
+    twitterImage: ogImage,
+    publishedTime,
+    modifiedTime
+  }}
+>
+  <section class="pub-hero-surface" aria-label="Abertura">
+    <div class="pub-shell">
+      <PublicationHero
+        title={entry.data.title}
+        dek={entry.data.dek}
+        type={entry.data.type}
+        domain={entry.data.domain}
+        authors={entry.data.authors}
+        publishedAt={entry.data.published_at}
+        hero={entry.data.hero}
+        heroAlt={entry.data.hero_alt}
+      />
+    </div>
+  </section>
+
+  <section class="pub-paper-surface" aria-label="Leitura">
+    <div class="pub-shell">
+      <article class="pub-article">
+        <Content />
+      </article>
+      <UpdatedNotice updatedAt={entry.data.updated_at} />
+      <Related items={relatedItems} />
+    </div>
+  </section>
+</PublicacoesLayout>

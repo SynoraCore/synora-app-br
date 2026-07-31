@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PublicacoesLayout from '../../../modules/publicacoes/layouts/PublicacoesLayout.astro';
+import PublicationCard from '../../../modules/publicacoes/components/PublicationCard.astro';
+import FeaturedSpotlight from '../../../modules/publicacoes/components/FeaturedSpotlight.astro';
+import { featuredSlugs } from '../../../modules/publicacoes/featured';
+import {
+  asHrefPtPublicacoes,
+  listPublishedPtBr,
+  resolveFeaturedPtBr,
+  toCardData
+} from '../../../modules/publicacoes/lib/publications';
+
+type Publication = CollectionEntry<'publicacoes'>;
+
+const title = 'Publicações — Synora';
+const description = 'Ideias, observações e registros sobre os fenômenos que estamos investigando.';
+const path = '/pt/publicacoes/';
+
+const latest = await listPublishedPtBr();
+const featured = await resolveFeaturedPtBr(featuredSlugs);
+---
+
+<PublicacoesLayout title={title} description={description} path={path}>
+  <section class="pub-index-surface" aria-label="Publicações">
+    <div class="pub-shell">
+      <header class="pub-index-head">
+        <h1 class="pub-index-title">Publicações</h1>
+        <p class="pub-index-dek">
+          Ideias, observações e registros sobre os fenômenos que estamos investigando.
+        </p>
+      </header>
+
+      {featured.length > 0 && (
+        <section class="pub-index-section" aria-label="Destaque">
+          <h2 class="pub-section-title">Destaque</h2>
+          <FeaturedSpotlight entry={featured[0]} href={asHrefPtPublicacoes(featured[0].data.slug)} />
+        </section>
+      )}
+
+      <section class="pub-index-section" aria-label="Recentes">
+        <h2 class="pub-section-title">Recentes</h2>
+        <div class="pub-latest-grid">
+          {latest.map((entry) => {
+            const data = toCardData(entry);
+            return <PublicationCard href={asHrefPtPublicacoes(data.slug)} {...data} />;
+          })}
+        </div>
+      </section>
+    </div>
+  </section>
+</PublicacoesLayout>

@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PUBLICACOES_DIR = path.resolve(__dirname, '../../src/content/publicacoes/pt');
+const PUBLICACOES_DIR = path.resolve(__dirname, '../../src/content/publicacoes');
+const FORBIDDEN_KEYS = new Set(['language']);
 
 const STATUSES = new Set(['draft', 'review', 'published', 'archived']);
 const PLACEHOLDER_PATTERNS = [
@@ -97,18 +98,35 @@ function ensureArrayNonEmpty(errors, file, fm, key) {
   if (!Array.isArray(v) || v.length === 0) errors.push(`${file}: '${key}' precisa ser lista não vazia`);
 }
 
+async function listMarkdownFiles(rootDir) {
+  const entries = await readdir(rootDir, { withFileTypes: true });
+  const out = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(rootDir, entry.name);
+    if (entry.isDirectory()) {
+      const nested = await listMarkdownFiles(fullPath);
+      out.push(...nested);
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith('.md')) out.push(fullPath);
+  }
+
+  return out;
+}
+
 async function main() {
-  const files = (await readdir(PUBLICACOES_DIR)).filter((f) => f.endsWith('.md'));
-  if (files.length === 0) {
+  const fullPaths = await listMarkdownFiles(PUBLICACOES_DIR);
+  if (fullPaths.length === 0) {
     process.stdout.write('Nenhuma publicação encontrada.\n');
     return;
   }
 
-  const existingSlugs = new Set(files.map((f) => f.replace(/\.md$/i, '')));
   const errors = [];
+  const allEntries = [];
 
-  for (const file of files) {
-    const fullPath = path.join(PUBLICACOES_DIR, file);
+  for (const fullPath of fullPaths) {
+    const file = path.relative(PUBLICACOES_DIR, fullPath);
     const md = await readFile(fullPath, 'utf8');
     const fm = parseFrontmatter(md);
 
@@ -117,22 +135,28 @@ async function main() {
       continue;
     }
 
+    for (const key of Object.keys(fm)) {
+      if (FORBIDDEN_KEYS.has(key)) errors.push(`${file}: '${key}' não é permitido (substituído por 'edition')`);
+    }
+
     const status = fm.status;
     if (typeof status !== 'string' || !STATUSES.has(status)) {
       errors.push(`${file}: status inválido '${status ?? ''}'`);
     }
 
-    const slugFromFilename = file.replace(/\.md$/i, '');
+    const slugFromFilename = path.basename(file).replace(/\.md$/i, '');
     if (fm.slug && fm.slug !== slugFromFilename) {
       errors.push(`${file}: slug '${fm.slug}' != filename '${slugFromFilename}'`);
     }
 
     // Base (schema mínimo para não quebrar build/content)
-    for (const k of ['title', 'dek', 'slug', 'type', 'domain', 'language', 'authors', 'status', 'published_at']) {
+    for (const k of ['publication_id', 'edition', 'title', 'dek', 'slug', 'type', 'domain', 'authors', 'status', 'published_at']) {
       if (fm[k] === undefined) errors.push(`${file}: faltando '${k}'`);
     }
 
     if (status === 'draft' || status === 'review' || status === 'published') {
+      ensureNonEmptyString(errors, file, fm, 'publication_id');
+      ensureNonEmptyString(errors, file, fm, 'edition');
       ensureNonEmptyString(errors, file, fm, 'title');
       ensureNonEmptyString(errors, file, fm, 'dek');
       ensureNonEmptyString(errors, file, fm, 'type');
@@ -163,8 +187,79 @@ async function main() {
 
     if (status === 'archived') {
       // archived: apenas garantir frontmatter básico presente (sem exigir conteúdo/publicação ativa)
-      for (const k of ['title', 'slug', 'status']) {
+      for (const k of ['publication_id', 'edition', 'title', 'slug', 'status']) {
         if (fm[k] === undefined) errors.push(`${file}: faltando '${k}' (archived)`);
+      }
+    }
+
+    if (typeof fm.publication_id === 'string' && typeof fm.edition === 'string' && typeof fm.slug === 'string') {
+      allEntries.push({
+        file,
+        edition: String(fm.edition).trim(),
+        publicationId: String(fm.publication_id).trim(),
+        slug: String(fm.slug).trim(),
+        status: String(fm.status ?? '').trim()
+      });
+    }
+  }
+
+  // Unicidade global: publication_id + edition
+  const seenPublicationEdition = new Map();
+  for (const entry of allEntries) {
+    const key = `${entry.publicationId}::${entry.edition}`;
+    const previous = seenPublicationEdition.get(key);
+    if (previous) {
+      errors.push(`duplicidade publication_id+edition: '${entry.publicationId}' + '${entry.edition}' (${previous} e ${entry.file})`);
+    } else {
+      seenPublicationEdition.set(key, entry.file);
+    }
+  }
+
+  // Unicidade por edição: slug + edition
+  const seenSlugEdition = new Map();
+  for (const entry of allEntries) {
+    const key = `${entry.slug}::${entry.edition}`;
+    const previous = seenSlugEdition.get(key);
+    if (previous) {
+      errors.push(`duplicidade slug+edition: '${entry.slug}' + '${entry.edition}' (${previous} e ${entry.file})`);
+    } else {
+      seenSlugEdition.set(key, entry.file);
+    }
+  }
+
+  // Related: resolver sempre dentro da mesma edition (somente quando published)
+  const bySlugEdition = new Map();
+  for (const entry of allEntries) bySlugEdition.set(`${entry.slug}::${entry.edition}`, { status: entry.status });
+
+  for (const fullPath of fullPaths) {
+    const file = path.relative(PUBLICACOES_DIR, fullPath);
+    const md = await readFile(fullPath, 'utf8');
+    const fm = parseFrontmatter(md);
+    if (!fm) continue;
+
+    const status = String(fm.status ?? '');
+    if (status !== 'published') continue;
+
+    const edition = String(fm.edition ?? '').trim();
+    const related = fm.related;
+    if (related === undefined) continue;
+
+    if (!Array.isArray(related)) {
+      errors.push(`${file}: related deve ser lista`);
+      continue;
+    }
+
+    if (related.length > 3) errors.push(`${file}: related > 3`);
+    for (const rel of related) {
+      const relSlug = String(rel).trim();
+      const key = `${relSlug}::${edition}`;
+      if (!bySlugEdition.has(key)) {
+        errors.push(`${file}: related slug inexistente na mesma edition '${edition}': '${relSlug}'`);
+        continue;
+      }
+      const relStatus = bySlugEdition.get(key)?.status;
+      if (relStatus !== 'published') {
+        errors.push(`${file}: related slug não published na mesma edition '${edition}': '${relSlug}'`);
       }
     }
   }
@@ -176,7 +271,7 @@ async function main() {
     return;
   }
 
-  process.stdout.write(`CHECK OK (${files.length}): regras por status aplicadas.\n`);
+  process.stdout.write(`CHECK OK (${fullPaths.length}): regras por status aplicadas.\n`);
 }
 
 main().catch((err) => {

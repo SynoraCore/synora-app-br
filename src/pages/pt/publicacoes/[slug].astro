@@ -8,7 +8,7 @@ import { asHrefPtPublicacoes } from '../../../modules/publicacoes/lib/publicatio
 
 export async function getStaticPaths() {
   const entries = await getCollection('publicacoes');
-  const published = entries.filter((entry) => entry.data.language === 'pt-BR' && entry.data.status === 'published');
+  const published = entries.filter((entry) => entry.data.edition === 'pt-BR' && entry.data.status === 'published');
 
   return published.map((entry) => ({
     params: { slug: entry.data.slug }
@@ -19,7 +19,7 @@ const { slug } = Astro.params;
 
 const entries = await getCollection('publicacoes');
 const entry = entries.find(
-  (candidate) => candidate.data.language === 'pt-BR' && candidate.data.status === 'published' && candidate.data.slug === slug
+  (candidate) => candidate.data.edition === 'pt-BR' && candidate.data.status === 'published' && candidate.data.slug === slug
 );
 
 if (!entry) {
@@ -32,7 +32,7 @@ const relatedSlugs = entry.data.related ?? [];
 const relatedItems = entries
   .filter(
     (candidate) =>
-      candidate.data.language === 'pt-BR' &&
+      candidate.data.edition === 'pt-BR' &&
       candidate.data.status === 'published' &&
       relatedSlugs.includes(candidate.data.slug) &&
       candidate.data.slug !== entry.data.slug

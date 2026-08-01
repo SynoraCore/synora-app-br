@@ -2,15 +2,16 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const publicacoes = defineCollection({
-  loader: glob({ base: 'src/content/publicacoes/pt', pattern: '**/*.md' }),
+  loader: glob({ base: 'src/content/publicacoes', pattern: '**/*.md' }),
   schema: ({ image }) =>
     z.object({
+      publication_id: z.string(),
+      edition: z.enum(['pt-BR', 'es-CL', 'es-AR']),
       title: z.string(),
       dek: z.string(),
       slug: z.string(),
       type: z.enum(['observation', 'analysis', 'note', 'research']),
       domain: z.enum(['core', 'guardian', 'tourism', 'mediadora', 'audio', 'protocolos', 'institutional']),
-      language: z.enum(['pt-BR', 'es', 'en']),
       authors: z.array(z.string()),
       status: z.enum(['draft', 'review', 'published', 'archived']),
       published_at: z.coerce.date(),

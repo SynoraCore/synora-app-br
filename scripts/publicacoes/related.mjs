@@ -123,10 +123,10 @@ async function listAllPublicacoes() {
     const slug = String(fm.slug ?? '').trim();
     const title = String(fm.title ?? '').trim();
     const status = String(fm.status ?? '').trim();
-    const language = String(fm.language ?? '').trim();
+    const edition = String(fm.edition ?? '').trim();
     if (!slug) continue;
 
-    items.push({ slug, title, status, language, file, fullPath });
+    items.push({ slug, title, status, edition, file, fullPath });
   }
 
   items.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR'));
@@ -160,14 +160,14 @@ async function main() {
   }
 
   const allBySlug = new Map(all.map((p) => [p.slug, p]));
-  const eligible = all.filter((p) => p.language === 'pt-BR' && p.status === 'published');
+  const eligible = all.filter((p) => p.edition === 'pt-BR' && p.status === 'published');
   const eligibleBySlug = new Map(eligible.map((p) => [p.slug, p]));
 
   let originSlug = originArg;
   if (!originSlug) {
     process.stdout.write('Publications (origem):\n');
     all.forEach((p, i) => {
-      process.stdout.write(`${String(i + 1).padStart(2, ' ')}. ${p.slug} — ${p.title} [${p.status}/${p.language}]\n`);
+      process.stdout.write(`${String(i + 1).padStart(2, ' ')}. ${p.slug} — ${p.title} [${p.status}/${p.edition}]\n`);
     });
 
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -261,4 +261,3 @@ main().catch((err) => {
   process.stderr.write(`${err?.message || String(err)}\n`);
   process.exitCode = 1;
 });
-

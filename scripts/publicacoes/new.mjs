@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PUBLICACOES_DIR = path.resolve(__dirname, '../../src/content/publicacoes/pt');
+const DEFAULT_EDITION = 'pt-BR';
 
 function normalizeSlug(input) {
   return String(input ?? '')
@@ -66,11 +67,13 @@ async function main() {
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   try {
+    const publicationId = (await rl.question('Publication ID (ex.: P001): ')).trim();
     const title = (await rl.question('Título: ')).trim();
     const dek = (await rl.question('Dek: ')).trim();
     const slugRaw = await rl.question('Slug (vazio = auto a partir do título): ');
     const slug = normalizeSlug(slugRaw || title);
 
+    if (!publicationId) throw new Error('Publication ID é obrigatório.');
     if (!title) throw new Error('Título é obrigatório.');
     if (!dek) throw new Error('Dek é obrigatório.');
     if (!slug) throw new Error('Slug inválido.');
@@ -80,7 +83,6 @@ async function main() {
       (await rl.question(
         'Domain [core|guardian|tourism|mediadora|audio|protocolos|institutional] (default: core): '
       )).trim() || 'core';
-    const language = (await rl.question('Language [pt-BR|es|en] (default: pt-BR): ')).trim() || 'pt-BR';
     const authorsRaw = (await rl.question('Autores (separados por vírgula) (default: Synora): ')).trim() || 'Synora';
     const status = (await rl.question('Status [draft|review|published|archived] (default: draft): ')).trim() || 'draft';
 
@@ -101,12 +103,13 @@ async function main() {
 
     const filePath = path.join(PUBLICACOES_DIR, `${slug}.md`);
     const frontmatter = {
+      publication_id: publicationId,
+      edition: DEFAULT_EDITION,
       title,
       dek,
       slug,
       type,
       domain,
-      language,
       authors,
       status,
       published_at
@@ -139,4 +142,3 @@ main().catch((err) => {
   process.stderr.write(`${err?.message || String(err)}\n`);
   process.exitCode = 1;
 });
-

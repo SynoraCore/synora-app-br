@@ -1,10 +1,11 @@
 ---
+publication_id: "P001"
+edition: "pt-BR"
 title: "Quando duas observações independentes começam a dizer a mesma coisa"
 dek: "Sobre convergência, independência e o momento em que uma percepção começa a se tornar evidência."
 slug: "quando-duas-observacoes-independentes-convergem"
 type: "analysis"
 domain: "core"
-language: "pt-BR"
 authors:
   - "Synora"
 status: "published"

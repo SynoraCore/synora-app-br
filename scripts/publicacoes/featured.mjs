@@ -83,12 +83,12 @@ async function loadPublishedPtBr() {
     if (!fm) continue;
 
     const status = String(fm.status ?? '');
-    const language = String(fm.language ?? '');
+    const edition = String(fm.edition ?? '');
     const slug = String(fm.slug ?? '').trim();
     const title = String(fm.title ?? '').trim();
 
     if (status !== 'published') continue;
-    if (language !== 'pt-BR') continue;
+    if (edition !== 'pt-BR') continue;
     if (!slug) continue;
 
     items.push({ slug, title, file });
@@ -155,4 +155,3 @@ main().catch((err) => {
   process.stderr.write(`${err?.message || String(err)}\n`);
   process.exitCode = 1;
 });
-

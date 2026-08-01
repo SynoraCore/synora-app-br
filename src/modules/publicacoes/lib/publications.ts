@@ -9,7 +9,7 @@ function featuredError(message: string) {
 export async function listPublishedPtBr() {
   const entries = await getCollection('publicacoes');
   return entries
-    .filter((entry) => entry.data.language === 'pt-BR' && entry.data.status === 'published')
+    .filter((entry) => entry.data.edition === 'pt-BR' && entry.data.status === 'published')
     .sort((a, b) => b.data.published_at.getTime() - a.data.published_at.getTime());
 }
 
@@ -22,7 +22,7 @@ export async function resolveFeaturedPtBr(slugs: string[]) {
   for (const slug of slugs) {
     const entry = bySlug.get(slug);
     if (!entry) throw featuredError(`slug "${slug}" não encontrado`);
-    if (entry.data.language !== 'pt-BR') throw featuredError(`slug "${slug}" não pertence a pt-BR`);
+    if (entry.data.edition !== 'pt-BR') throw featuredError(`slug "${slug}" não pertence a pt-BR`);
     if (entry.data.status !== 'published') throw featuredError(`slug "${slug}" não está published`);
     featured.push(entry);
   }

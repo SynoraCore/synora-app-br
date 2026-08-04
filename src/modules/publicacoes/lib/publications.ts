@@ -1,19 +1,28 @@
 import { getCollection } from 'astro:content';
 
 type Publication = Awaited<ReturnType<typeof getCollection<'publicacoes'>>>[number];
+type Edition = Publication['data']['edition'];
 
 function featuredError(message: string) {
   return new Error(`[Publicações] Featured inválido: ${message}`);
 }
 
 export async function listPublishedPtBr() {
+  return listPublishedByEdition('pt-BR');
+}
+
+export async function listPublishedByEdition(edition: Edition) {
   const entries = await getCollection('publicacoes');
   return entries
-    .filter((entry) => entry.data.edition === 'pt-BR' && entry.data.status === 'published')
+    .filter((entry) => entry.data.edition === edition && entry.data.status === 'published')
     .sort((a, b) => b.data.published_at.getTime() - a.data.published_at.getTime());
 }
 
 export async function resolveFeaturedPtBr(slugs: string[]) {
+  return resolveFeaturedByEdition('pt-BR', slugs);
+}
+
+export async function resolveFeaturedByEdition(edition: Edition, slugs: string[]) {
   const entries = await getCollection('publicacoes');
   const bySlug = new Map<string, Publication>();
   for (const entry of entries) bySlug.set(entry.data.slug, entry);
@@ -22,7 +31,7 @@ export async function resolveFeaturedPtBr(slugs: string[]) {
   for (const slug of slugs) {
     const entry = bySlug.get(slug);
     if (!entry) throw featuredError(`slug "${slug}" não encontrado`);
-    if (entry.data.edition !== 'pt-BR') throw featuredError(`slug "${slug}" não pertence a pt-BR`);
+    if (entry.data.edition !== edition) throw featuredError(`slug "${slug}" não pertence a ${edition}`);
     if (entry.data.status !== 'published') throw featuredError(`slug "${slug}" não está published`);
     featured.push(entry);
   }
@@ -32,6 +41,10 @@ export async function resolveFeaturedPtBr(slugs: string[]) {
 
 export function asHrefPtPublicacoes(slug: string) {
   return `/pt/publicacoes/${slug}/`;
+}
+
+export function asHrefEsPublicaciones(slug: string) {
+  return `/es/publicaciones/${slug}/`;
 }
 
 export function toCardData(entry: Publication) {

@@ -1,0 +1,54 @@
+---
+import PublicacoesLayout from '../../../modules/publicacoes/layouts/PublicacoesLayout.astro';
+import PublicationCard from '../../../modules/publicacoes/components/PublicationCard.astro';
+import FeaturedSpotlight from '../../../modules/publicacoes/components/FeaturedSpotlight.astro';
+import { featuredSlugsEsAr, featuredSlugsEsCl } from '../../../modules/publicacoes/featured';
+import {
+  asHrefEsPublicaciones,
+  listPublishedByEdition,
+  resolveFeaturedByEdition,
+  toCardData
+} from '../../../modules/publicacoes/lib/publications';
+import { resolvePublicationEditionForSpanishTerritory, resolveTerritory } from '../../../territory';
+
+const title = 'Publicaciones — Synora';
+const description = 'Publicaciones';
+const path = '/es/publicaciones/';
+
+if (resolveTerritory() === 'br') {
+  return Astro.redirect('/pt/publicacoes/', 308);
+}
+
+const edition = resolvePublicationEditionForSpanishTerritory();
+const featuredSlugs = edition === 'es-AR' ? featuredSlugsEsAr : featuredSlugsEsCl;
+
+const latest = await listPublishedByEdition(edition);
+const featured = await resolveFeaturedByEdition(edition, featuredSlugs);
+---
+
+<PublicacoesLayout title={title} description={description} path={path} lang={edition === 'es-AR' ? 'es-AR' : 'es-CL'}>
+  <section class="pub-index-surface" aria-label="Publicaciones">
+    <div class="pub-shell">
+      <header class="pub-index-head">
+        <h1 class="pub-index-title">Publicaciones</h1>
+      </header>
+
+      {featured.length > 0 && (
+        <section class="pub-index-section" aria-label="Destacado">
+          <h2 class="pub-section-title">Destacado</h2>
+          <FeaturedSpotlight entry={featured[0]} href={asHrefEsPublicaciones(featured[0].data.slug)} />
+        </section>
+      )}
+
+      <section class="pub-index-section" aria-label="Recientes">
+        <h2 class="pub-section-title">Recientes</h2>
+        <div class="pub-latest-grid">
+          {latest.map((entry) => {
+            const data = toCardData(entry);
+            return <PublicationCard href={asHrefEsPublicaciones(data.slug)} {...data} />;
+          })}
+        </div>
+      </section>
+    </div>
+  </section>
+</PublicacoesLayout>

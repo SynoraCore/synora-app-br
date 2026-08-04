@@ -1,6 +1,7 @@
 ---
 import type { Locale, RouteKey } from '../i18n/types';
 import { getContent, getRoutePath } from '../i18n';
+import { resolveTerritory } from '../territory';
 
 type Props = {
   locale: Locale;
@@ -11,7 +12,12 @@ type Props = {
 const { locale, routeKey, variant = 'internal' } = Astro.props;
 const content = getContent(locale);
 const homePath = content.routes.home.path;
-const publicationsPath = '/pt/publicacoes/';
+const territory = resolveTerritory();
+const publicationsPathByLocale: Partial<Record<Locale, string>> =
+  territory === 'br'
+    ? { pt: '/pt/publicacoes/' }
+    : { es: '/es/publicaciones/' };
+const publicationsPath = publicationsPathByLocale[locale];
 
 const navLinks =
   variant === 'quiet'
@@ -21,9 +27,7 @@ const navLinks =
           { label: content.nav.home, href: homePath },
           { label: content.nav.infrastructure, href: '#infraestrutura' },
           { label: content.nav.solutions, href: '#solucoes' },
-          ...(locale === 'pt'
-            ? [{ label: content.nav.publications, href: publicationsPath }]
-            : []),
+          ...(publicationsPath ? [{ label: content.nav.publications, href: publicationsPath }] : []),
           { label: content.nav.about, href: '#sobre' },
           { label: content.nav.contact, href: '#contato' },
         ]
@@ -31,9 +35,7 @@ const navLinks =
           { label: content.nav.home, href: homePath },
           { label: content.nav.infrastructure, href: `${homePath}#infraestrutura` },
           { label: content.nav.solutions, href: `${homePath}#solucoes` },
-          ...(locale === 'pt'
-            ? [{ label: content.nav.publications, href: publicationsPath }]
-            : []),
+          ...(publicationsPath ? [{ label: content.nav.publications, href: publicationsPath }] : []),
           { label: content.nav.about, href: `${homePath}#sobre` },
           { label: content.nav.contact, href: `${homePath}#contato` },
         ];

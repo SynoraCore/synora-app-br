@@ -8,8 +8,22 @@ type Props = {
 };
 
 const { title, description, path = '/', alternates = [], ogType = 'website' } = Astro.props;
-const origin = 'https://synora.app.br';
-const canonicalUrl = new URL(path, origin).toString();
+
+function resolveOrigin(): string {
+  if (Astro.site) return Astro.site.toString().replace(/\/$/, '');
+  return 'https://synora.app.br';
+}
+
+function asAbsolute(href: string, origin: string) {
+  try {
+    return new URL(href).toString();
+  } catch {
+    return new URL(href, origin).toString();
+  }
+}
+
+const origin = resolveOrigin();
+const canonicalUrl = asAbsolute(path, origin);
 ---
 
 <title>{title}</title>
@@ -24,7 +38,7 @@ const canonicalUrl = new URL(path, origin).toString();
 <meta name="theme-color" content="#304FFE" />
 <link rel="canonical" href={canonicalUrl} />
 {alternates.map((alt) => (
-  <link rel="alternate" hreflang={alt.hreflang} href={new URL(alt.href, origin).toString()} />
+  <link rel="alternate" hreflang={alt.hreflang} href={asAbsolute(alt.href, origin)} />
 ))}
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content="Synora" />

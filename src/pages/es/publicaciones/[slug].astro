@@ -4,37 +4,39 @@ import PublicacoesLayout from '../../../modules/publicacoes/layouts/PublicacoesL
 import PublicationHero from '../../../modules/publicacoes/components/PublicationHero.astro';
 import UpdatedNotice from '../../../modules/publicacoes/components/UpdatedNotice.astro';
 import Related from '../../../modules/publicacoes/components/Related.astro';
-import { asHrefPtPublicacoes } from '../../../modules/publicacoes/lib/publications';
-import { resolveTerritory, territoryOrigins } from '../../../territory';
+import { asHrefEsPublicaciones } from '../../../modules/publicacoes/lib/publications';
+import { resolvePublicationEditionForSpanishTerritory, resolveTerritory, territoryOrigins } from '../../../territory';
 
 export async function getStaticPaths() {
+  const edition = resolvePublicationEditionForSpanishTerritory();
   const entries = await getCollection('publicacoes');
-  const published = entries.filter((entry) => entry.data.edition === 'pt-BR' && entry.data.status === 'published');
+  const published = entries.filter((entry) => entry.data.edition === edition && entry.data.status === 'published');
 
   return published.map((entry) => ({
     params: { slug: entry.data.slug }
   }));
 }
 
+const edition = resolvePublicationEditionForSpanishTerritory();
 const { slug } = Astro.params;
 
 const entries = await getCollection('publicacoes');
 const entry = entries.find(
-  (candidate) => candidate.data.edition === 'pt-BR' && candidate.data.status === 'published' && candidate.data.slug === slug
+  (candidate) => candidate.data.edition === edition && candidate.data.status === 'published' && candidate.data.slug === slug
 );
 
 if (!entry) {
   return Astro.redirect('/404');
 }
 
-if (resolveTerritory() !== 'br') {
-  const siblingEs = entries.find(
+if (resolveTerritory() === 'br') {
+  const siblingPt = entries.find(
     (candidate) =>
       candidate.data.publication_id === entry.data.publication_id &&
       candidate.data.status === 'published' &&
-      (candidate.data.edition === 'es-CL' || candidate.data.edition === 'es-AR')
+      candidate.data.edition === 'pt-BR'
   );
-  const target = siblingEs ? `/es/publicaciones/${siblingEs.data.slug}/` : '/es/publicaciones/';
+  const target = siblingPt ? `/pt/publicacoes/${siblingPt.data.slug}/` : '/pt/publicacoes/';
   return Astro.redirect(target, 308);
 }
 
@@ -44,13 +46,13 @@ const relatedSlugs = entry.data.related ?? [];
 const relatedItems = entries
   .filter(
     (candidate) =>
-      candidate.data.edition === 'pt-BR' &&
+      candidate.data.edition === edition &&
       candidate.data.status === 'published' &&
       relatedSlugs.includes(candidate.data.slug) &&
       candidate.data.slug !== entry.data.slug
   )
   .map((candidate) => ({
-    href: asHrefPtPublicacoes(candidate.data.slug),
+    href: asHrefEsPublicaciones(candidate.data.slug),
     title: candidate.data.title,
     dek: candidate.data.dek,
     type: candidate.data.type,
@@ -61,14 +63,15 @@ const relatedItems = entries
 
 const title = entry.data.title;
 const description = entry.data.dek;
-const path = asHrefPtPublicacoes(entry.data.slug);
-const origin = Astro.site?.toString() ?? territoryOrigins().br;
+const path = asHrefEsPublicaciones(entry.data.slug);
+const origin = Astro.site?.toString() ?? (edition === 'es-AR' ? territoryOrigins().ar : territoryOrigins().cl);
 const publishedTime = entry.data.published_at.toISOString();
 const modifiedTime = entry.data.updated_at ? entry.data.updated_at.toISOString() : undefined;
 const ogImage = entry.data.hero ? new URL(entry.data.hero.src, origin).toString() : undefined;
 
-const siblings = entries
-  .filter((candidate) => candidate.data.publication_id === entry.data.publication_id && candidate.data.status === 'published');
+const siblings = entries.filter(
+  (candidate) => candidate.data.publication_id === entry.data.publication_id && candidate.data.status === 'published'
+);
 
 const siblingPtBr = siblings.find((candidate) => candidate.data.edition === 'pt-BR');
 const siblingEsCl = siblings.find((candidate) => candidate.data.edition === 'es-CL');
@@ -76,7 +79,7 @@ const siblingEsAr = siblings.find((candidate) => candidate.data.edition === 'es-
 
 const origins = territoryOrigins();
 const alternates = [
-  siblingPtBr && { hreflang: 'pt-BR', href: new URL(asHrefPtPublicacoes(siblingPtBr.data.slug), origins.br).toString() },
+  siblingPtBr && { hreflang: 'pt-BR', href: new URL(`/pt/publicacoes/${siblingPtBr.data.slug}/`, origins.br).toString() },
   siblingEsCl && { hreflang: 'es-CL', href: new URL(`/es/publicaciones/${siblingEsCl.data.slug}/`, origins.cl).toString() },
   siblingEsAr && { hreflang: 'es-AR', href: new URL(`/es/publicaciones/${siblingEsAr.data.slug}/`, origins.ar).toString() },
 ].filter(Boolean);
@@ -86,7 +89,7 @@ const alternates = [
   title={`${title} | Synora`}
   description={description}
   path={path}
-  lang="pt-BR"
+  lang={edition === 'es-AR' ? 'es-AR' : 'es-CL'}
   alternates={alternates}
   ogType="article"
   head={{
@@ -96,7 +99,7 @@ const alternates = [
     modifiedTime
   }}
 >
-  <section class="pub-hero-surface" aria-label="Abertura">
+  <section class="pub-hero-surface" aria-label="Apertura">
     <div class="pub-shell">
       <PublicationHero
         title={entry.data.title}
@@ -111,7 +114,7 @@ const alternates = [
     </div>
   </section>
 
-  <section class="pub-paper-surface" aria-label="Leitura">
+  <section class="pub-paper-surface" aria-label="Lectura">
     <div class="pub-shell">
       <article class="pub-article">
         <Content />

@@ -10,12 +10,17 @@ import {
   resolveFeaturedPtBr,
   toCardData
 } from '../../../modules/publicacoes/lib/publications';
+import { resolveTerritory } from '../../../territory';
 
 type Publication = CollectionEntry<'publicacoes'>;
 
 const title = 'Publicações — Synora';
 const description = 'Ideias, observações e registros sobre os fenômenos que estamos investigando.';
 const path = '/pt/publicacoes/';
+
+if (resolveTerritory() !== 'br') {
+  return Astro.redirect('/es/publicaciones/', 308);
+}
 
 const latest = await listPublishedPtBr();
 const featured = await resolveFeaturedPtBr(featuredSlugs);

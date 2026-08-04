@@ -8,7 +8,7 @@ type: "analysis"
 domain: "core"
 authors:
   - "Synora"
-status: "review"
+status: "published"
 published_at: "2026-07-31T00:00:00Z"
 ---
 

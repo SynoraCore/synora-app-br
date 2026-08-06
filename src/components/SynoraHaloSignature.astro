@@ -95,14 +95,14 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.
     background:
       radial-gradient(
         circle at 50% 50%,
-        rgba(56, 189, 248, 0.18),
+        rgba(56, 189, 248, 0.2),
         rgba(56, 189, 248, 0.085) 28%,
         rgba(56, 189, 248, 0.035) 46%,
         rgba(56, 189, 248, 0.015) 62%,
         rgba(56, 189, 248, 0) 78%
       );
-    opacity: 0.18;
-    filter: blur(22px);
+    opacity: 0.17;
+    filter: blur(20px);
     will-change: transform, opacity, filter;
     animation: synora-halo-atmo-breathe 10s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
@@ -110,28 +110,28 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.
   @keyframes synora-halo-atmo-breathe {
     0% {
       transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.18;
-      filter: blur(22px);
+      opacity: 0.17;
+      filter: blur(20px);
     }
     45% {
       transform: translate(-50%, -50%) scale(1.02);
-      opacity: 0.29;
-      filter: blur(30px);
+      opacity: 0.33;
+      filter: blur(34px);
     }
     50% {
       transform: translate(-50%, -50%) scale(1.02);
-      opacity: 0.29;
-      filter: blur(30px);
+      opacity: 0.33;
+      filter: blur(34px);
     }
     95% {
       transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.18;
-      filter: blur(22px);
+      opacity: 0.17;
+      filter: blur(20px);
     }
     100% {
       transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.18;
-      filter: blur(22px);
+      opacity: 0.17;
+      filter: blur(20px);
     }
   }
 

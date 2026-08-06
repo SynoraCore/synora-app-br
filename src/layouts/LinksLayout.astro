@@ -17,7 +17,7 @@ const { title, description, path, ogImage, robots } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SeoHead title={title} description={description} path={path} ogImage={ogImage} themeColor="#0B1220" robots={robots} />
-    <style>
+    <style is:global>
       :root {
         --bg: #0b1220;
         --text: #ffffff;

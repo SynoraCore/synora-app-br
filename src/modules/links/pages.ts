@@ -12,7 +12,7 @@ export const LINKS_PAGES: Record<LinksPage['slug'], LinksPage> = {
       { icon: 'book', label: 'Synora Publications', href: '/pt/publicacoes/' },
       { icon: 'linkedin', label: 'LinkedIn', href: 'https://linkedin.com/in/claudiorfuentes' },
       { icon: 'instagram', label: 'Instagram Argentina', href: 'https://instagram.com/synora.arg' },
-      { icon: 'instagram', label: 'Instagram Chile', href: 'https://instagram.com/synora.cl' },
+      { icon: 'instagram', label: 'Instagram Chile', href: 'https://instagram.com/synora.ia' },
       { icon: 'mail', label: 'hello@synora.app.br', href: 'mailto:hello@synora.app.br' },
     ],
   },

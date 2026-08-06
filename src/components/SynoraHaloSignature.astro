@@ -6,7 +6,7 @@ type Props = {
   atmoScale?: number;
 };
 
-const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.75 } = Astro.props;
+const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.15 } = Astro.props;
 ---
 
 <div
@@ -95,14 +95,14 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.
     background:
       radial-gradient(
         circle at 50% 50%,
-        rgba(56, 189, 248, 0.22),
+        rgba(56, 189, 248, 0.24),
         rgba(56, 189, 248, 0.085) 28%,
         rgba(56, 189, 248, 0.035) 46%,
         rgba(56, 189, 248, 0.015) 62%,
         rgba(56, 189, 248, 0) 78%
       );
-    opacity: 0.15;
-    filter: blur(20px);
+    opacity: 0.14;
+    filter: blur(12px);
     will-change: transform, opacity, filter;
     animation: synora-halo-atmo-breathe 10s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
@@ -110,28 +110,28 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.
   @keyframes synora-halo-atmo-breathe {
     0% {
       transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.15;
-      filter: blur(20px);
+      opacity: 0.14;
+      filter: blur(12px);
     }
     45% {
       transform: translate(-50%, -50%) scale(1.02);
-      opacity: 0.4;
-      filter: blur(40px);
+      opacity: 0.46;
+      filter: blur(24px);
     }
     50% {
       transform: translate(-50%, -50%) scale(1.02);
-      opacity: 0.4;
-      filter: blur(40px);
+      opacity: 0.46;
+      filter: blur(24px);
     }
     95% {
       transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.15;
-      filter: blur(20px);
+      opacity: 0.14;
+      filter: blur(12px);
     }
     100% {
       transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.15;
-      filter: blur(20px);
+      opacity: 0.14;
+      filter: blur(12px);
     }
   }
 

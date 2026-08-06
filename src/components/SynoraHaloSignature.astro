@@ -6,7 +6,7 @@ type Props = {
   atmoScale?: number;
 };
 
-const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.15 } = Astro.props;
+const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.55 } = Astro.props;
 ---
 
 <div
@@ -94,44 +94,40 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.
     transform: translate(-50%, -50%) scale(1.008);
     background:
       radial-gradient(
-        circle at 50% 50%,
-        rgba(56, 189, 248, 0.24),
-        rgba(56, 189, 248, 0.085) 28%,
-        rgba(56, 189, 248, 0.035) 46%,
-        rgba(56, 189, 248, 0.015) 62%,
-        rgba(56, 189, 248, 0) 78%
+        circle,
+        rgba(255, 255, 255, 0.42) 0%,
+        rgba(220, 235, 255, 0.24) 28%,
+        rgba(120, 170, 255, 0.1) 55%,
+        rgba(48, 79, 254, 0.03) 72%,
+        transparent 82%
       );
-    opacity: 0.14;
-    filter: blur(12px);
-    will-change: transform, opacity, filter;
-    animation: synora-halo-atmo-breathe 10s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    opacity: 0.35;
+    filter: none;
+    transform: translate(-50%, -50%) scale(0.92);
+    will-change: transform, opacity;
+    animation: synora-halo-atmo-breathe 9.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   @keyframes synora-halo-atmo-breathe {
     0% {
-      transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.14;
-      filter: blur(12px);
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0.35;
     }
     45% {
-      transform: translate(-50%, -50%) scale(1.02);
-      opacity: 0.46;
-      filter: blur(24px);
+      transform: translate(-50%, -50%) scale(1.12);
+      opacity: 0.95;
     }
     50% {
-      transform: translate(-50%, -50%) scale(1.02);
-      opacity: 0.46;
-      filter: blur(24px);
+      transform: translate(-50%, -50%) scale(1.12);
+      opacity: 0.95;
     }
     95% {
-      transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.14;
-      filter: blur(12px);
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0.35;
     }
     100% {
-      transform: translate(-50%, -50%) scale(1.008);
-      opacity: 0.14;
-      filter: blur(12px);
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0.35;
     }
   }
 

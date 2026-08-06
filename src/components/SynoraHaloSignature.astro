@@ -3,13 +3,21 @@ type Props = {
   size?: number;
   markSize?: number;
   src?: string;
+  atmoScale?: number;
 };
 
-const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props;
+const { size = 62, markSize = 32, src = '/brand/synora-mark.svg', atmoScale = 2.75 } = Astro.props;
 ---
 
-<div class="synora-halo-signature" style={`--halo-size:${size}px; --mark-size:${markSize}px;`} aria-hidden="true">
+<div
+  class="synora-halo-signature"
+  style={`--halo-size:${size}px; --mark-size:${markSize}px; --atmo-scale:${atmoScale};`}
+  aria-hidden="true"
+>
+  <div class="synora-halo-signature__halo-atmo"></div>
+  <div class="synora-halo-signature__halo-main"></div>
   <div class="synora-halo-signature__core">
+    <div class="synora-halo-signature__inner-ring" aria-hidden="true"></div>
     <img class="synora-halo-signature__mark" src={src} alt="" width={markSize} height={markSize} loading="eager" decoding="async" />
   </div>
 </div>
@@ -21,6 +29,7 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
     display: grid;
     place-items: center;
     position: relative;
+    isolation: isolate;
   }
 
   .synora-halo-signature__core {
@@ -29,114 +38,112 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
     display: grid;
     place-items: center;
     border-radius: 999px;
-    border: 0.75px solid rgba(255, 255, 255, 0.14);
     background: rgba(255, 255, 255, 0.02);
     position: relative;
-    z-index: 1;
+    z-index: 3;
+  }
+
+  .synora-halo-signature__inner-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    border: 0.75px solid rgba(255, 255, 255, 0.14);
+    opacity: 0.95;
+    pointer-events: none;
   }
 
   .synora-halo-signature__mark {
     width: var(--mark-size);
     height: var(--mark-size);
     display: block;
+    position: relative;
+    z-index: 1;
   }
 
-  .synora-halo-signature::before,
-  .synora-halo-signature::after {
-    content: "";
+  .synora-halo-signature__halo-main,
+  .synora-halo-signature__halo-atmo {
     position: absolute;
     border-radius: 999px;
     pointer-events: none;
     transform-origin: center;
+    inset: 0;
     will-change: transform, opacity;
   }
 
-  .synora-halo-signature::before {
-    inset: -20px;
+  .synora-halo-signature__halo-main {
+    z-index: 1;
+    inset: -18px;
     background:
       radial-gradient(
         circle at 50% 50%,
-        rgba(56, 189, 248, 0.52),
-        rgba(56, 189, 248, 0.18) 42%,
+        rgba(56, 189, 248, 0.34),
+        rgba(56, 189, 248, 0.14) 40%,
+        rgba(56, 189, 248, 0.06) 62%,
+        rgba(56, 189, 248, 0) 84%
+      );
+    opacity: 0.1;
+    filter: blur(10px);
+  }
+
+  .synora-halo-signature__halo-atmo {
+    z-index: 2;
+    width: calc(var(--halo-size) * var(--atmo-scale));
+    height: calc(var(--halo-size) * var(--atmo-scale));
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1.008);
+    background:
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(56, 189, 248, 0.18),
+        rgba(56, 189, 248, 0.085) 28%,
+        rgba(56, 189, 248, 0.035) 46%,
+        rgba(56, 189, 248, 0.015) 62%,
         rgba(56, 189, 248, 0) 78%
       );
-    opacity: 0.12;
-    transform: scale(1);
-    filter: blur(10px);
+    opacity: 0.18;
+    filter: blur(22px);
     will-change: transform, opacity, filter;
-    animation: synora-halo-irradiate 10.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: synora-halo-atmo-breathe 10s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
-  .synora-halo-signature::after {
-    inset: -10px;
-    border: 0.75px solid rgba(56, 189, 248, 0.18);
-    opacity: 0.19;
-    transform: scale(1);
-    animation: synora-halo-irradiate-border 10.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  }
-
-  @keyframes synora-halo-irradiate {
+  @keyframes synora-halo-atmo-breathe {
     0% {
-      transform: scale(1);
-      opacity: 0.12;
-      filter: blur(10px);
-    }
-    37% {
-      transform: scale(1.075);
-      opacity: 0.24;
-      filter: blur(18px);
+      transform: translate(-50%, -50%) scale(1.008);
+      opacity: 0.18;
+      filter: blur(22px);
     }
     45% {
-      transform: scale(1.075);
-      opacity: 0.24;
-      filter: blur(18px);
+      transform: translate(-50%, -50%) scale(1.02);
+      opacity: 0.29;
+      filter: blur(30px);
     }
-    92% {
-      transform: scale(1);
-      opacity: 0.12;
-      filter: blur(10px);
+    50% {
+      transform: translate(-50%, -50%) scale(1.02);
+      opacity: 0.29;
+      filter: blur(30px);
     }
-    100% {
-      transform: scale(1);
-      opacity: 0.12;
-      filter: blur(10px);
-    }
-  }
-
-  @keyframes synora-halo-irradiate-border {
-    0% {
-      transform: scale(1);
-      opacity: 0.19;
-    }
-    37% {
-      transform: scale(1.055);
-      opacity: 0.36;
-    }
-    45% {
-      transform: scale(1.055);
-      opacity: 0.36;
-    }
-    92% {
-      transform: scale(1);
-      opacity: 0.19;
+    95% {
+      transform: translate(-50%, -50%) scale(1.008);
+      opacity: 0.18;
+      filter: blur(22px);
     }
     100% {
-      transform: scale(1);
-      opacity: 0.19;
+      transform: translate(-50%, -50%) scale(1.008);
+      opacity: 0.18;
+      filter: blur(22px);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .synora-halo-signature::before,
-    .synora-halo-signature::after {
+    .synora-halo-signature__halo-atmo {
       animation: none;
     }
 
-    .synora-halo-signature::before,
-    .synora-halo-signature::after {
-      opacity: 0.19;
-      transform: scale(1);
-      filter: none;
+    .synora-halo-signature__halo-atmo {
+      opacity: 0.22;
+      transform: translate(-50%, -50%) scale(1.012);
+      filter: blur(26px);
     }
   }
 </style>

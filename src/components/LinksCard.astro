@@ -1,0 +1,19 @@
+---
+type Props = {
+  icon: string;
+  label: string;
+  href: string;
+  note?: string;
+  isPlaceholder?: boolean;
+};
+
+const { icon, label, href, note, isPlaceholder = false } = Astro.props;
+const safeHref = isPlaceholder ? undefined : href;
+---
+
+<a class:list={['link', isPlaceholder && 'is-placeholder']} href={safeHref} aria-disabled={isPlaceholder ? 'true' : undefined}>
+  <span class="icon" aria-hidden="true">{icon}</span>
+  <span class="label">{label}</span>
+  {note ? <span class="note">{note}</span> : null}
+</a>
+

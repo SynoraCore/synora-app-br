@@ -5,9 +5,21 @@ type Props = {
   path?: string;
   alternates?: Array<{ href: string; hreflang: string }>;
   ogType?: 'website' | 'article';
+  ogImage?: string;
+  themeColor?: string;
+  robots?: string;
 };
 
-const { title, description, path = '/', alternates = [], ogType = 'website' } = Astro.props;
+const {
+  title,
+  description,
+  path = '/',
+  alternates = [],
+  ogType = 'website',
+  ogImage,
+  themeColor = '#304FFE',
+  robots,
+} = Astro.props;
 
 function resolveOrigin(): string {
   if (Astro.site) return Astro.site.toString().replace(/\/$/, '');
@@ -24,10 +36,12 @@ function asAbsolute(href: string, origin: string) {
 
 const origin = resolveOrigin();
 const canonicalUrl = asAbsolute(path, origin);
+const resolvedOgImage = ogImage ? asAbsolute(ogImage, origin) : undefined;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
+{robots ? <meta name="robots" content={robots} /> : null}
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
@@ -35,7 +49,7 @@ const canonicalUrl = asAbsolute(path, origin);
 <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
-<meta name="theme-color" content="#304FFE" />
+<meta name="theme-color" content={themeColor} />
 <link rel="canonical" href={canonicalUrl} />
 {alternates.map((alt) => (
   <link rel="alternate" hreflang={alt.hreflang} href={asAbsolute(alt.href, origin)} />
@@ -45,4 +59,6 @@ const canonicalUrl = asAbsolute(path, origin);
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalUrl} />
+{resolvedOgImage ? <meta property="og:image" content={resolvedOgImage} /> : null}
 <meta name="twitter:card" content="summary_large_image" />
+{resolvedOgImage ? <meta name="twitter:image" content={resolvedOgImage} /> : null}

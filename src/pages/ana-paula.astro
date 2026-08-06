@@ -1,0 +1,31 @@
+---
+import LinksLayout from '../layouts/LinksLayout.astro';
+import LinksCard from '../components/LinksCard.astro';
+import { getLinksPage } from '../modules/links/pages';
+
+const page = getLinksPage('ana-paula');
+---
+
+<LinksLayout
+  title={page.title}
+  description={page.description}
+  path="/ana-paula"
+  ogImage="/brand-primary-512.png"
+  robots="noindex, nofollow"
+>
+  <main class="wrap">
+    <header class="brand">
+      <div class="logo" aria-hidden="true">
+        <img src="/brand/synora-mark.svg" alt="" width="28" height="28" loading="eager" decoding="async" />
+      </div>
+      <h1>{page.headline}</h1>
+      <p class="tagline">{page.tagline}</p>
+    </header>
+
+    <section class="list" aria-label="Links">
+      {page.items.map((item) => (
+        <LinksCard {...item} />
+      ))}
+    </section>
+  </main>
+</LinksLayout>

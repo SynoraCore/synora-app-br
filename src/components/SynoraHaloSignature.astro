@@ -56,14 +56,14 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
     background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.24), rgba(56, 189, 248, 0.08) 42%, rgba(56, 189, 248, 0) 68%);
     opacity: 0.22;
     transform: scale(1);
-    animation: synora-halo-breathe 10.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: synora-halo-breathe 14.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   .synora-halo-signature::after {
     border: 0.75px solid rgba(56, 189, 248, 0.18);
     opacity: 0.22;
     transform: scale(1);
-    animation: synora-halo-breathe 10.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: synora-halo-breathe 14.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   @keyframes synora-halo-breathe {
@@ -71,15 +71,15 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
       transform: scale(1);
       opacity: 0.22;
     }
-    38% {
-      transform: scale(1.035);
-      opacity: 0.3;
+    55% {
+      transform: scale(1.032);
+      opacity: 0.28;
     }
-    52% {
-      transform: scale(1.035);
-      opacity: 0.3;
+    65% {
+      transform: scale(1.032);
+      opacity: 0.28;
     }
-    90% {
+    88% {
       transform: scale(1);
       opacity: 0.22;
     }
@@ -102,4 +102,3 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
     }
   }
 </style>
-

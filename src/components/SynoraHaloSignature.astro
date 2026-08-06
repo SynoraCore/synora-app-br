@@ -1,0 +1,105 @@
+---
+type Props = {
+  size?: number;
+  markSize?: number;
+  src?: string;
+};
+
+const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props;
+---
+
+<div class="synora-halo-signature" style={`--halo-size:${size}px; --mark-size:${markSize}px;`} aria-hidden="true">
+  <div class="synora-halo-signature__core">
+    <img class="synora-halo-signature__mark" src={src} alt="" width={markSize} height={markSize} loading="eager" decoding="async" />
+  </div>
+</div>
+
+<style>
+  .synora-halo-signature {
+    width: var(--halo-size);
+    height: var(--halo-size);
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+
+  .synora-halo-signature__core {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 0.75px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+    position: relative;
+    z-index: 1;
+  }
+
+  .synora-halo-signature__mark {
+    width: var(--mark-size);
+    height: var(--mark-size);
+    display: block;
+  }
+
+  .synora-halo-signature::before,
+  .synora-halo-signature::after {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    border-radius: 999px;
+    pointer-events: none;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .synora-halo-signature::before {
+    background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.24), rgba(56, 189, 248, 0.08) 42%, rgba(56, 189, 248, 0) 68%);
+    opacity: 0.22;
+    transform: scale(1);
+    animation: synora-halo-breathe 10.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  .synora-halo-signature::after {
+    border: 0.75px solid rgba(56, 189, 248, 0.18);
+    opacity: 0.22;
+    transform: scale(1);
+    animation: synora-halo-breathe 10.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  @keyframes synora-halo-breathe {
+    0% {
+      transform: scale(1);
+      opacity: 0.22;
+    }
+    38% {
+      transform: scale(1.035);
+      opacity: 0.3;
+    }
+    52% {
+      transform: scale(1.035);
+      opacity: 0.3;
+    }
+    90% {
+      transform: scale(1);
+      opacity: 0.22;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.22;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .synora-halo-signature::before,
+    .synora-halo-signature::after {
+      animation: none;
+    }
+
+    .synora-halo-signature::before,
+    .synora-halo-signature::after {
+      opacity: 0.22;
+      transform: scale(1);
+    }
+  }
+</style>
+

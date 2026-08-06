@@ -1,6 +1,8 @@
 ---
+import LinksIcon, { type LinksIconName } from './LinksIcon.astro';
+
 type Props = {
-  icon: string;
+  icon: LinksIconName;
   label: string;
   href: string;
   note?: string;
@@ -12,8 +14,7 @@ const safeHref = isPlaceholder ? undefined : href;
 ---
 
 <a class:list={['link', isPlaceholder && 'is-placeholder']} href={safeHref} aria-disabled={isPlaceholder ? 'true' : undefined}>
-  <span class="icon" aria-hidden="true">{icon}</span>
+  <span class="icon" aria-hidden="true"><LinksIcon name={icon} /></span>
   <span class="label">{label}</span>
   {note ? <span class="note">{note}</span> : null}
 </a>
-

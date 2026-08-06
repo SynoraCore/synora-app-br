@@ -4,13 +4,14 @@ import LinksCard from '../components/LinksCard.astro';
 import { getLinksPage } from '../modules/links/pages';
 
 const page = getLinksPage('links');
+const year = new Date().getFullYear();
 ---
 
 <LinksLayout title={page.title} description={page.description} path="/links" ogImage="/brand-primary-512.png">
   <main class="wrap">
     <header class="brand">
       <div class="logo" aria-hidden="true">
-        <img src="/brand/synora-mark.svg" alt="" width="28" height="28" loading="eager" decoding="async" />
+        <img src="/brand/synora-mark.svg" alt="" width="32" height="32" loading="eager" decoding="async" />
       </div>
       <h1>{page.headline}</h1>
       <p class="tagline">{page.tagline}</p>
@@ -22,7 +23,6 @@ const page = getLinksPage('links');
       ))}
     </section>
 
-    <footer class="foot">Synora Links is an institutional page, not a product.</footer>
+    <footer class="foot">© {year} Synora. Official institutional links.</footer>
   </main>
 </LinksLayout>
-

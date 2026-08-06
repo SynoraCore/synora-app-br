@@ -15,6 +15,8 @@ const year = new Date().getFullYear();
       </div>
       <h1>{page.headline}</h1>
       <p class="tagline">{page.tagline}</p>
+      <p class="intro">Official access to Synora&#39;s ecosystem.</p>
+      <div class="rule" aria-hidden="true"></div>
     </header>
 
     <section class="list" aria-label="Official links">
@@ -23,6 +25,9 @@ const year = new Date().getFullYear();
       ))}
     </section>
 
-    <footer class="foot">© {year} Synora. Official institutional links.</footer>
+    <footer class="foot">
+      <div>© {year} Synora</div>
+      <div>Official Institutional Links</div>
+    </footer>
   </main>
 </LinksLayout>

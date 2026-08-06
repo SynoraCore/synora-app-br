@@ -12,6 +12,8 @@
     { "source": "/finance/", "destination": "/pt/finance", "permanent": true },
     { "source": "/international", "destination": "/pt/international", "permanent": true },
     { "source": "/international/", "destination": "/pt/international", "permanent": true },
+    { "source": "/publicacoes", "destination": "/pt/publicacoes/", "permanent": true },
+    { "source": "/publicacoes/", "destination": "/pt/publicacoes/", "permanent": true },
     { "source": "/en/mediator", "destination": "/en/mediadora", "permanent": true },
     { "source": "/en/mediator/", "destination": "/en/mediadora", "permanent": true }
   ]

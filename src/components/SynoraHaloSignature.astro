@@ -45,7 +45,7 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
   .synora-halo-signature::after {
     content: "";
     position: absolute;
-    inset: -7px;
+    inset: -10px;
     border-radius: 999px;
     pointer-events: none;
     transform-origin: center;
@@ -53,46 +53,68 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
   }
 
   .synora-halo-signature::before {
-    background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.24), rgba(56, 189, 248, 0.08) 42%, rgba(56, 189, 248, 0) 68%);
-    opacity: 0.2;
+    background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.28), rgba(56, 189, 248, 0.1) 44%, rgba(56, 189, 248, 0) 72%);
+    opacity: 0.19;
     transform: scale(1);
     filter: blur(0px);
-    animation: synora-halo-breathe 10.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: synora-halo-breathe 10.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   .synora-halo-signature::after {
     border: 0.75px solid rgba(56, 189, 248, 0.18);
-    opacity: 0.2;
+    opacity: 0.19;
     transform: scale(1);
-    filter: blur(0px);
-    animation: synora-halo-breathe 10.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: synora-halo-breathe-border 10.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   @keyframes synora-halo-breathe {
     0% {
       transform: scale(1);
-      opacity: 0.2;
+      opacity: 0.19;
       filter: blur(0px);
     }
-    37% {
-      transform: scale(1.052);
-      opacity: 0.36;
-      filter: blur(2.25px);
+    38% {
+      transform: scale(1.055);
+      opacity: 0.38;
+      filter: blur(2.8px);
     }
-    44% {
-      transform: scale(1.052);
-      opacity: 0.36;
-      filter: blur(2.25px);
+    47% {
+      transform: scale(1.055);
+      opacity: 0.38;
+      filter: blur(2.8px);
     }
-    90% {
+    92% {
       transform: scale(1);
-      opacity: 0.2;
+      opacity: 0.19;
       filter: blur(0px);
     }
     100% {
       transform: scale(1);
-      opacity: 0.2;
+      opacity: 0.19;
       filter: blur(0px);
+    }
+  }
+
+  @keyframes synora-halo-breathe-border {
+    0% {
+      transform: scale(1);
+      opacity: 0.19;
+    }
+    38% {
+      transform: scale(1.055);
+      opacity: 0.34;
+    }
+    47% {
+      transform: scale(1.055);
+      opacity: 0.34;
+    }
+    92% {
+      transform: scale(1);
+      opacity: 0.19;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.19;
     }
   }
 
@@ -104,7 +126,7 @@ const { size = 62, markSize = 32, src = '/brand/synora-mark.svg' } = Astro.props
 
     .synora-halo-signature::before,
     .synora-halo-signature::after {
-      opacity: 0.2;
+      opacity: 0.19;
       transform: scale(1);
       filter: none;
     }

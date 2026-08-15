@@ -25,6 +25,8 @@ export type LocaleContent = {
     home: string;
     infrastructure: string;
     solutions: string;
+    publications: string;
+    library: string;
     about: string;
     contact: string;
     coreCta: string;

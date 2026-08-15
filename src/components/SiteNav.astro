@@ -19,6 +19,8 @@ const publicationsPathByLocale: Partial<Record<Locale, string>> =
     : { es: '/es/publicaciones/' };
 const publicationsPath = publicationsPathByLocale[locale];
 
+const libraryPath = '/pt/biblioteca/';
+
 const navLinks =
   variant === 'quiet'
     ? []
@@ -28,6 +30,7 @@ const navLinks =
           { label: content.nav.infrastructure, href: '#infraestrutura' },
           { label: content.nav.solutions, href: '#solucoes' },
           ...(publicationsPath ? [{ label: content.nav.publications, href: publicationsPath }] : []),
+          { label: content.nav.library, href: libraryPath },
           { label: content.nav.about, href: '#sobre' },
           { label: content.nav.contact, href: '#contato' },
         ]
@@ -36,6 +39,7 @@ const navLinks =
           { label: content.nav.infrastructure, href: `${homePath}#infraestrutura` },
           { label: content.nav.solutions, href: `${homePath}#solucoes` },
           ...(publicationsPath ? [{ label: content.nav.publications, href: publicationsPath }] : []),
+          { label: content.nav.library, href: libraryPath },
           { label: content.nav.about, href: `${homePath}#sobre` },
           { label: content.nav.contact, href: `${homePath}#contato` },
         ];

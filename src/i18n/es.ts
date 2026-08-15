@@ -17,6 +17,7 @@ export const es: LocaleContent = {
     infrastructure: 'Infraestructura',
     solutions: 'Soluciones',
     publications: 'Publicaciones',
+    library: 'Biblioteca',
     about: 'Sobre',
     contact: 'Contacto',
     coreCta: 'Core',

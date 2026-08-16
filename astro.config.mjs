@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 function resolveTerritory() {
   const raw = (process.env.SYNORA_TERRITORY || '').toLowerCase().trim();
@@ -43,6 +44,8 @@ function isInternalTerritoryRoute(value) {
 
 export default defineConfig({
   site: resolveSite(),
+  output: 'server',
+  adapter: vercel(),
   integrations: [
     sitemap({
       filter(page) {

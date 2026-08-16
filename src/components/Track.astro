@@ -1,0 +1,15 @@
+---
+import type { TrackPayload } from '../lib/track';
+import trackClientUrl from '../scripts/track-client.ts?url';
+
+export type Props = {
+  event: TrackPayload['event'];
+  payload?: Omit<TrackPayload, 'event'>;
+};
+
+const { event, payload = {} } = Astro.props;
+const fullPayload: TrackPayload = { event, ...payload };
+---
+
+<script type="application/json" data-synora-track="payload" set:html={JSON.stringify(fullPayload)} />
+<script type="module" src={trackClientUrl}></script>

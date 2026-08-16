@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Track from '../../../components/Track.astro';
+import { EDITIONS, getProtocolById, type ProtocolId } from '../../../lib/protocolos';
+
+const edition = 'pt-br' as const;
+const { protocolId } = Astro.params as { protocolId: ProtocolId };
+const editionMeta = EDITIONS.find((e) => e.edition === edition);
+if (!editionMeta) throw new Error('Invalid edition');
+const { market, lang } = editionMeta;
+
+const protocol = getProtocolById(protocolId);
+if (!protocol) throw new Error('Protocol not found');
+
+const title = `Entrega — ${protocol.title[edition]}`;
+const description = 'Entrega mínima do protocolo (MVP).';
+const path = `/pt-br/deliver/${protocolId}/`;
+const pdfEndpoint = `/pt-br/deliver/${protocolId}/pdf`;
+---
+
+<BaseLayout title={title} description={description} path={path} lang={lang}>
+  <Track event="protocol_opened" payload={{ market, edition, protocol_id: protocol.protocol_id, path, content_id: 'deliver' }} />
+
+  <main class="shell protocolos">
+    <header class="protocol-header">
+      <p class="kicker">Entrega (MVP)</p>
+      <h1>{protocol.title[edition]}</h1>
+    </header>
+
+    <section class="section">
+      <div class="panel">
+        <p id="status" class="muted-text">Verificando entitlement…</p>
+        <p>
+          <a class="button primary disabled" id="openPdf" href="#" target="_blank" rel="noopener" aria-disabled="true">
+            Abrir PDF
+          </a>
+        </p>
+
+        <hr class="sep" />
+
+	        <p class="muted-text">Quando você concluir o protocolo, marque abaixo para registrarmos o evento.</p>
+	        <button class="button disabled" id="markCompleted" type="button" disabled>
+	          Marcar como concluído
+	        </button>
+	      </div>
+	    </section>
+	  </main>
+
+  {protocolId === 'P001' && (
+    <>
+      <script
+        type="application/json"
+        data-synora-deliver="config"
+        set:html={JSON.stringify({ market, edition, protocolId, pdfEndpoint, trackEndpoint: (import.meta.env.PUBLIC_TRACK_ENDPOINT || '').trim() })}
+      />
+      <script is:inline>
+        const jsonEl = document.currentScript?.previousElementSibling;
+        const raw = jsonEl?.getAttribute('data-synora-deliver') === 'config' ? jsonEl.textContent : null;
+        const cfg = raw ? JSON.parse(raw) : null;
+
+        const market = cfg?.market;
+        const edition = cfg?.edition;
+        const protocolId = cfg?.protocolId;
+        const pdfEndpoint = cfg?.pdfEndpoint;
+        const trackEndpoint = (cfg?.trackEndpoint || '').trim();
+
+	      const statusEl = document.getElementById('status');
+	      const openPdf = document.getElementById('openPdf');
+	      const markCompleted = document.getElementById('markCompleted');
+
+      function setStatus(text) {
+        if (!statusEl) return;
+        statusEl.textContent = text;
+      }
+
+      function setEnabled(el, enabled) {
+        if (!el) return;
+        if (enabled) {
+          el.classList.remove('disabled');
+          el.removeAttribute('disabled');
+          el.setAttribute('aria-disabled', 'false');
+        } else {
+          el.classList.add('disabled');
+          el.setAttribute('disabled', 'true');
+          el.setAttribute('aria-disabled', 'true');
+        }
+      }
+
+	      if (openPdf) {
+	        openPdf.addEventListener('click', () => {
+	          setStatus('Acesso liberado.');
+	          window.synoraTrack?.({ event: 'deliver_pdf_opened', market, edition, protocol_id: 'P001' });
+	          try {
+	            sessionStorage.setItem('synora_deliver_p001_pdf_opened', '1');
+	          } catch {}
+	        });
+	      }
+	
+	      if (markCompleted) {
+	        markCompleted.addEventListener('click', () => {
+	          setEnabled(markCompleted, false);
+	          window.synoraTrack?.({ event: 'protocol_completed', market, edition, protocol_id: 'P001' });
+	          setStatus('Concluído. Obrigado!');
+	          setTimeout(() => setEnabled(markCompleted, true), 1200);
+	        });
+	      }
+
+      try {
+        if (sessionStorage.getItem('synora_deliver_p001_pdf_opened') === '1') setStatus('Acesso liberado.');
+      } catch {}
+
+      async function verify() {
+        try {
+          if (sessionStorage.getItem('synora_deliver_p001_pdf_opened') === '1') {
+            setStatus('Acesso liberado.');
+            return;
+          }
+        } catch {}
+
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id') || '';
+
+        if (!sessionId) {
+          setStatus('Acesso negado. Volte pelo checkout.');
+          if (openPdf) openPdf.setAttribute('href', '#');
+          setEnabled(openPdf, false);
+          setEnabled(markCompleted, false);
+          return;
+        }
+
+        if (!trackEndpoint) {
+          setStatus('Aguardando confirmação do pagamento (fail-closed)…');
+          if (openPdf) openPdf.setAttribute('href', '#');
+          setEnabled(openPdf, false);
+          setEnabled(markCompleted, false);
+          return;
+        }
+
+        const base = trackEndpoint.endsWith('/track')
+          ? trackEndpoint.slice(0, -'/track'.length)
+          : trackEndpoint.replace(/\/+$/, '');
+        const url = `${base}/checkout/status?session_id=${encodeURIComponent(sessionId)}`;
+
+        const res = await fetch(url, { method: 'GET' }).catch(() => null);
+
+        const data = res ? await res.json().catch(() => null) : null;
+        const entitled = Boolean(data?.ok && data?.paid && data?.entitlement_active);
+
+        if (!entitled) {
+          setStatus('Acesso negado. Pagamento/entitlement não confirmado.');
+          if (openPdf) openPdf.setAttribute('href', '#');
+          setEnabled(openPdf, false);
+          setEnabled(markCompleted, false);
+          return;
+        }
+
+        if (String(data?.protocol_id || '') !== String(protocolId || '')) {
+          setStatus('Acesso negado. Protocolo inválido.');
+          if (openPdf) openPdf.setAttribute('href', '#');
+          setEnabled(openPdf, false);
+          setEnabled(markCompleted, false);
+          return;
+        }
+
+        setStatus('Acesso liberado.');
+        if (openPdf && pdfEndpoint) openPdf.setAttribute('href', `${pdfEndpoint}?session_id=${encodeURIComponent(sessionId)}`);
+        setEnabled(openPdf, true);
+        setEnabled(markCompleted, true);
+      }
+
+      verify();
+      setTimeout(verify, 2500);
+      setTimeout(verify, 6000);
+      </script>
+    </>
+  )}
+</BaseLayout>

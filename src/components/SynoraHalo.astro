@@ -169,9 +169,9 @@ function iconSvgForKey(key: string): string {
 }
 ---
 
-<div class="synora-halo" data-state="collapsed" aria-label={ariaLabel}>
+<div class="synora-halo" data-state="expanded" aria-label={ariaLabel}>
 	  <div class="synora-halo__stage">
-	    <button class="synora-halo__core" type="button" aria-expanded="false" aria-controls="synora-halo-destinations">
+	    <button class="synora-halo__core" type="button" aria-expanded="true" aria-controls="synora-halo-destinations">
 	      <span class="synora-halo__sr">Abrir destinos</span>
 	      <div class="synora-halo__core-surface" aria-hidden="true"></div>
 	      <SynoraHaloSignature size={150} markSize={72} atmoScale={1.28} atmoOpacity={0.12} atmoOpacityPeak={0.26} />
@@ -690,9 +690,9 @@ function iconSvgForKey(key: string): string {
 
   .synora-halo[data-state='expanded'] .synora-halo__satellite {
     pointer-events: auto;
-    transition: none;
-    animation: synora-halo-release 980ms cubic-bezier(0.16, 0.82, 0.24, 1) both;
-    animation-delay: var(--delay);
+    opacity: 1;
+    filter: none;
+    transform: translate(-50%, -50%) translate(var(--x), var(--y)) scale(1);
   }
 
   @keyframes synora-halo-release {
@@ -725,8 +725,8 @@ function iconSvgForKey(key: string): string {
   }
 
   .synora-halo[data-state='expanded'] .synora-halo__link {
-    animation: synora-halo-link-drift 720ms cubic-bezier(0.18, 0.84, 0.22, 1) both;
-    animation-delay: var(--delay);
+    stroke-dashoffset: 6;
+    opacity: 0.42;
   }
 
   @keyframes synora-halo-link-drift {

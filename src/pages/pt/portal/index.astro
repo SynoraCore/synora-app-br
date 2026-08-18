@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SiteNav from '../../../components/SiteNav.astro';
+import SynoraHalo from '../../../components/SynoraHalo.astro';
+import { CONTENT } from '../../../i18n';
+
+const content = CONTENT.pt;
+const title = 'Portal — Synora';
+const description = 'Portal Synora (protótipo BR): núcleo + Halo + destinos do ecossistema.';
+const path = '/pt/portal/';
+
+const items = [
+  { key: 'biblioteca', label: 'Biblioteca', href: '/pt/biblioteca/' },
+  { key: 'publicacoes', label: 'Publicações', href: '/pt/publicacoes/' },
+  { key: 'core', label: 'Core', href: '/pt/core/' },
+  { key: 'mediadora', label: 'Mediadora', href: '/pt/mediadora/' },
+  { key: 'mediadora-audio', label: 'Mediadora Áudio', href: '/pt/audio/' },
+  { key: 'internacional', label: 'Internacional', href: '/pt/international/' },
+];
+---
+
+<BaseLayout title={title} description={description} path={path} lang={content.lang}>
+  <SiteNav locale="pt" routeKey="home" />
+  <main>
+    <section class="portal" aria-label="Portal Synora">
+      <div class="portal-shell">
+        <header class="portal-head" aria-hidden="true">
+          <div class="portal-title">PORTAL SYNORA</div>
+          <div class="portal-subtitle">Acesse tudo que move o ecossistema.</div>
+        </header>
+        <SynoraHalo items={items} />
+      </div>
+    </section>
+  </main>
+  <SiteFooter left={content.footer.left} right={content.footer.right} />
+</BaseLayout>
+
+<style>
+  .portal {
+    padding: calc(80px + 10px) 0 54px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .portal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 34%, rgba(124, 77, 255, 0.12), transparent 62%),
+      radial-gradient(circle at 24% 62%, rgba(0, 191, 165, 0.10), transparent 60%),
+      radial-gradient(circle at 80% 54%, rgba(48, 79, 254, 0.09), transparent 62%),
+      radial-gradient(circle at 50% 86%, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0) 58%),
+      linear-gradient(180deg, rgba(2, 8, 18, 0.94), rgba(2, 8, 18, 0) 34%, rgba(2, 8, 18, 0.94) 100%);
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .portal-shell {
+    width: min(var(--max), calc(100% - (var(--side-pad) * 2)));
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: calc(100svh - 80px - 54px);
+    position: relative;
+    z-index: 1;
+    gap: 12px;
+  }
+
+  .portal :global(.synora-halo) {
+    --halo-shift-y: -85px;
+  }
+
+  .portal-head {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding-top: 6px;
+  }
+
+  .portal-title {
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.84);
+  }
+
+  .portal-subtitle {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.58);
+  }
+</style>

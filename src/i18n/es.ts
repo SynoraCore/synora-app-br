@@ -90,9 +90,9 @@ export const es: LocaleContent = {
             href: '/es/tourism'
           },
           {
-            name: 'Synora Audio',
-            desc: 'Infraestructura para crear, proteger, distribuir y monetizar activos digitales.',
-            meta: 'Creación • Protección • Monetización',
+            name: 'Synora Creators',
+            desc: 'Infraestructura para creación, autoría, protección, distribución y monetización.',
+            meta: 'Creación • Autoría • Derechos • Monetización',
             href: '/es/audio'
           },
           {
@@ -233,8 +233,9 @@ export const es: LocaleContent = {
       },
       audio: {
         meta: {
-          title: 'Synora Audio',
-          description: 'Infraestructura para crear, proteger, distribuir y monetizar activos digitales con gobernanza y trazabilidad.',
+          title: 'Synora Creators',
+          description:
+            'Infraestructura para creación, autoría, protección, distribución y monetización de activos digitales con gobernanza y trazabilidad.',
           canonicalPath: '/es/audio'
         },
         kicker: 'Vertical',

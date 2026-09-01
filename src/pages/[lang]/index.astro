@@ -80,35 +80,37 @@ const audioConversationHref = `${content.routes.audio.path}/conversa`;
         <p class="section-copy">{page.solutions.copy}</p>
       </div>
 
-      <div class="grid-2">
-	        {page.solutions.cards.map((item) => (
-	          item.href ? (
-	            <a
-	              class="card card-link"
-	              href={item.href === content.routes.audio.path ? audioConversationHref : item.href}
-	              data-door={item.href === content.routes.audio.path ? 'audio' : undefined}
-	              data-door-label={item.href === content.routes.audio.path ? item.name : undefined}
-	            >
-              <div class="card-top">
-                <h3>{item.name}</h3>
-                <span class="tag">{page.solutions.tag}</span>
-              </div>
-              <p>{item.desc}</p>
-              <div class="meta">{item.meta}</div>
-            </a>
-          ) : (
-            <article class="card">
-              <div class="card-top">
-                <h3>{item.name}</h3>
-                <span class="tag">{page.solutions.tag}</span>
-              </div>
-              <p>{item.desc}</p>
-              <div class="meta">{item.meta}</div>
-            </article>
-          )
-        ))}
-      </div>
-    </section>
+	      <div class="grid-2">
+		        {page.solutions.cards.map((item) => {
+              const cardName = item.href === content.routes.audio.path ? 'Synora Creators' : item.name;
+              return (
+		          item.href ? (
+		            <a
+		              class="card card-link"
+		              href={item.href === content.routes.audio.path ? audioConversationHref : item.href}
+		              data-door={item.href === content.routes.audio.path ? 'audio' : undefined}
+		              data-door-label={item.href === content.routes.audio.path ? cardName : undefined}
+		            >
+	              <div class="card-top">
+	                <h3>{cardName}</h3>
+	                <span class="tag">{page.solutions.tag}</span>
+	              </div>
+	              <p>{item.desc}</p>
+	              <div class="meta">{item.meta}</div>
+	            </a>
+	          ) : (
+	            <article class="card">
+	              <div class="card-top">
+	                <h3>{cardName}</h3>
+	                <span class="tag">{page.solutions.tag}</span>
+	              </div>
+	              <p>{item.desc}</p>
+	              <div class="meta">{item.meta}</div>
+	            </article>
+	          )
+	        )})}
+	      </div>
+	    </section>
 
     <section id="sobre" class="section shell">
       <div class="split">

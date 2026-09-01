@@ -9,7 +9,7 @@ export const LINKS_PAGES: Record<LinksPage['slug'], LinksPage> = {
     tagline: 'Transforming Information into Evidence.',
     items: [
       { icon: 'globe', label: 'Website', href: 'https://synora.app.br' },
-      { icon: 'book', label: 'Synora Publications', href: '/pt/publicacoes/' },
+      { icon: 'book', label: 'Synora Publications', href: 'https://publicacoes.synora.app.br/pt/publicacoes/' },
       { icon: 'linkedin', label: 'LinkedIn', href: 'https://linkedin.com/in/claudiorfuentes' },
       { icon: 'instagram', label: 'Instagram Argentina', href: 'https://instagram.com/synora.arg' },
       { icon: 'instagram', label: 'Instagram Chile', href: 'https://instagram.com/synora.ia' },

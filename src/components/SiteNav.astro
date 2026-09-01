@@ -12,14 +12,10 @@ type Props = {
 const { locale, routeKey, variant = 'internal' } = Astro.props;
 const content = getContent(locale);
 const homePath = content.routes.home.path;
-const territory = resolveTerritory();
-const publicationsPathByLocale: Partial<Record<Locale, string>> =
-  territory === 'br'
-    ? { pt: '/pt/publicacoes/' }
-    : { es: '/es/publicaciones/' };
-const publicationsPath = publicationsPathByLocale[locale];
+resolveTerritory();
 
-const libraryPath = '/pt/biblioteca/';
+const publicationsPath = 'https://publicacoes.synora.app.br/pt/publicacoes/';
+const libraryPath = 'https://commerce.synora.app.br/pt/biblioteca/';
 
 const navLinks =
   variant === 'quiet'

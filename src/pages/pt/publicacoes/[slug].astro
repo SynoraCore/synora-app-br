@@ -1,123 +1,15 @@
 ---
-import { getCollection, render } from 'astro:content';
-import PublicacoesLayout from '../../../modules/publicacoes/layouts/PublicacoesLayout.astro';
-import PublicationHero from '../../../modules/publicacoes/components/PublicationHero.astro';
-import UpdatedNotice from '../../../modules/publicacoes/components/UpdatedNotice.astro';
-import Related from '../../../modules/publicacoes/components/Related.astro';
-import { asHrefPtPublicacoes } from '../../../modules/publicacoes/lib/publications';
-import { resolveTerritory, territoryOrigins } from '../../../territory';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const entries = await getCollection('publicacoes');
   const published = entries.filter((entry) => entry.data.edition === 'pt-BR' && entry.data.status === 'published');
 
   return published.map((entry) => ({
-    params: { slug: entry.data.slug }
+    params: { slug: entry.data.slug },
   }));
 }
 
 const { slug } = Astro.params;
-
-const entries = await getCollection('publicacoes');
-const entry = entries.find(
-  (candidate) => candidate.data.edition === 'pt-BR' && candidate.data.status === 'published' && candidate.data.slug === slug
-);
-
-if (!entry) {
-  return Astro.redirect('/404');
-}
-
-if (resolveTerritory() !== 'br') {
-  const siblingEs = entries.find(
-    (candidate) =>
-      candidate.data.publication_id === entry.data.publication_id &&
-      candidate.data.status === 'published' &&
-      (candidate.data.edition === 'es-CL' || candidate.data.edition === 'es-AR')
-  );
-  const target = siblingEs ? `/es/publicaciones/${siblingEs.data.slug}/` : '/es/publicaciones/';
-  return Astro.redirect(target, 308);
-}
-
-const { Content } = await render(entry);
-
-const relatedSlugs = entry.data.related ?? [];
-const relatedItems = entries
-  .filter(
-    (candidate) =>
-      candidate.data.edition === 'pt-BR' &&
-      candidate.data.status === 'published' &&
-      relatedSlugs.includes(candidate.data.slug) &&
-      candidate.data.slug !== entry.data.slug
-  )
-  .map((candidate) => ({
-    href: asHrefPtPublicacoes(candidate.data.slug),
-    title: candidate.data.title,
-    dek: candidate.data.dek,
-    type: candidate.data.type,
-    domain: candidate.data.domain,
-    publishedAt: candidate.data.published_at
-  }))
-  .slice(0, 3);
-
-const title = entry.data.title;
-const description = entry.data.dek;
-const path = asHrefPtPublicacoes(entry.data.slug);
-const origin = Astro.site?.toString() ?? territoryOrigins().br;
-const publishedTime = entry.data.published_at.toISOString();
-const modifiedTime = entry.data.updated_at ? entry.data.updated_at.toISOString() : undefined;
-const ogImage = entry.data.hero ? new URL(entry.data.hero.src, origin).toString() : undefined;
-
-const siblings = entries
-  .filter((candidate) => candidate.data.publication_id === entry.data.publication_id && candidate.data.status === 'published');
-
-const siblingPtBr = siblings.find((candidate) => candidate.data.edition === 'pt-BR');
-const siblingEsCl = siblings.find((candidate) => candidate.data.edition === 'es-CL');
-const siblingEsAr = siblings.find((candidate) => candidate.data.edition === 'es-AR');
-
-const origins = territoryOrigins();
-const alternates = [
-  siblingPtBr && { hreflang: 'pt-BR', href: new URL(asHrefPtPublicacoes(siblingPtBr.data.slug), origins.br).toString() },
-  siblingEsCl && { hreflang: 'es-CL', href: new URL(`/es/publicaciones/${siblingEsCl.data.slug}/`, origins.cl).toString() },
-  siblingEsAr && { hreflang: 'es-AR', href: new URL(`/es/publicaciones/${siblingEsAr.data.slug}/`, origins.ar).toString() },
-].filter(Boolean);
+return Astro.redirect(`https://publicacoes.synora.app.br/pt/publicacoes/${slug}/`, 308);
 ---
-
-<PublicacoesLayout
-  title={`${title} | Synora`}
-  description={description}
-  path={path}
-  lang="pt-BR"
-  alternates={alternates}
-  ogType="article"
-  head={{
-    ogImage,
-    twitterImage: ogImage,
-    publishedTime,
-    modifiedTime
-  }}
->
-  <section class="pub-hero-surface" aria-label="Abertura">
-    <div class="pub-shell">
-      <PublicationHero
-        title={entry.data.title}
-        dek={entry.data.dek}
-        type={entry.data.type}
-        domain={entry.data.domain}
-        authors={entry.data.authors}
-        publishedAt={entry.data.published_at}
-        hero={entry.data.hero}
-        heroAlt={entry.data.hero_alt}
-      />
-    </div>
-  </section>
-
-  <section class="pub-paper-surface" aria-label="Leitura">
-    <div class="pub-shell">
-      <article class="pub-article">
-        <Content />
-      </article>
-      <UpdatedNotice updatedAt={entry.data.updated_at} />
-      <Related items={relatedItems} />
-    </div>
-  </section>
-</PublicacoesLayout>

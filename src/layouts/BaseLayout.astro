@@ -40,10 +40,17 @@ const {
       ogType={ogType}
     />
     <slot name="head" />
-  </head>
-  <body>
-    <slot />
-    <script is:inline type="module">
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-RW91SCNKC4"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RW91SCNKC4');
+</script>
+</head>
+<body>
+<slot />
+       <script is:inline type="module">
       const STORAGE = {
         restoreUrl: 'synora:door:restoreUrl',
         restoreScrollY: 'synora:door:restoreScrollY',
